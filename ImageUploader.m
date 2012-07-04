@@ -100,7 +100,7 @@ Global`palette = PaletteNotebook[DynamicModule[{},
           markdown = "![Mathematica graphics](" <> url <> ")";
           copyToClipboard[markdown];
           PrependTo[CurrentValue[pnb, {TaggingRules, "ImageUploadHistory"}], 
-             {Thumbnail@Image[img], Button[url, copyToClipboard[url], Appearance -> "Palette"]}];
+             {Thumbnail@Image[img], With[{u=url}, Button[u, copyToClipboard[u], Appearance -> "Palette"]]}];
           If[Length[CurrentValue[pnb, {TaggingRules, "ImageUploadHistory"}]] > 6, 
              CurrentValue[pnb, {TaggingRules, "ImageUploadHistory"}] = Most@CurrentValue[pnb, {TaggingRules, "ImageUploadHistory"}]];
         ];
