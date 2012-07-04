@@ -355,7 +355,13 @@ Cell[TextData[{
   ButtonNote->
    "mailto:szhorvat@gmail.com?subject=StackExchange%20image%20uploader%\
 20palette"],
- "!"
+ "! You can use the ",
+ ButtonBox["issue tracker",
+  BaseStyle->"Hyperlink",
+  ButtonData->{
+    URL["https://github.com/szhorvat/Mathematica.SE-utilities/issues"], None},
+  ButtonNote->"https://github.com/szhorvat/Mathematica.SE-utilities/issues"],
+ " as well for reporting bugs."
 }], "Text"],
 
 Cell[BoxData[{
@@ -365,14 +371,15 @@ Cell[BoxData[{
   ";"}], "\[IndentingNewLine]", 
  RowBox[{"Get", "[", "\"\<ImageUploader.m\>\"", "]"}], "\[IndentingNewLine]", 
  RowBox[{
-  RowBox[{"ResetDirectory", "[", "]"}], 
-  ";"}], "\[IndentingNewLine]", "palette"}], "Input"]
+  RowBox[{"ResetDirectory", "[", "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"CreatePalette", "[", "palette", "]"}]}], "Input"]
 }, Open  ]]
 },
 WindowSize->{715, 559},
-WindowMargins->{{278, Automatic}, {Automatic, 62}},
+WindowMargins->{{81, Automatic}, {Automatic, 46}},
 PrivateNotebookOptions->{"FileOutlineCache"->False},
 TrackCellChangeTimes->False,
 FrontEndVersion->"8.0 for Microsoft Windows (32-bit) (October 6, 2011)",
 StyleDefinitions->"Default.nb"
 ]
+

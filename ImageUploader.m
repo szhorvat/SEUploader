@@ -1,6 +1,8 @@
-Begin["SOUploader`"];
+(* ::Package:: *)
 
-Global`palette = PaletteNotebook@DynamicModule[{},
+Begin["SEUploader`"];
+
+Global`palette = PaletteNotebook[DynamicModule[{},
    
    Column[{
      Button["Upload to SE",
@@ -16,12 +18,20 @@ Global`palette = PaletteNotebook@DynamicModule[{},
        Appearance -> "Palette"],
       
       Unevaluated@Sequence[]
-      ]
+      ],
+
+      Button["History...", 
+        MessageDialog[
+          Column[{Style["Click an URL to copy it", Bold],
+                  Grid@CurrentValue[pnb, {TaggingRules, "ImageUploadHistory"}]}], 
+          WindowTitle -> "History", WindowSize -> {360, All}],
+        Appearance -> "Palette"]
      }],
    
    (* init start *)
    Initialization :>
     (
+     pnb = EvaluationNotebook[];
      
      stackImage::httperr = "Server returned respose code: `1`";
      stackImage::err = "Server returner error: `1`";
@@ -69,25 +79,34 @@ Global`palette = PaletteNotebook@DynamicModule[{},
         result,
         Message[stackImage::err, error]; $Failed]
        ];
-     
-     stackMarkdown[g_] := 
-      "![Mathematica graphics](" <> stackImage[g] <> ")";
-     
-     stackCopyMarkdown[g_] := 
-      Module[{nb, markdown},
-       markdown = Check[stackMarkdown[g], $Failed];
-       If[markdown =!= $Failed,
-        nb = NotebookCreate[Visible -> False];
-        NotebookWrite[nb, Cell[markdown, "Text"]];
-        SelectionMove[nb, All, Notebook];
-        FrontEndTokenExecute[nb, "Copy"];
-        NotebookClose[nb];
-       ]
-      ];
+
+
+     copyToClipboard[text_] := 
+      Module[{nb},
+       nb = NotebookCreate[Visible -> False];
+       NotebookWrite[nb, Cell[text, "Text"]];
+       SelectionMove[nb, All, Notebook];
+       FrontEndTokenExecute[nb, "Copy"];
+       NotebookClose[nb];
+     ];
+
+     uploadButtonAction[img_] :=
+        Module[
+          {url, markdown},
+          Check[
+           url = stackImage[img],
+           Return[]
+          ];
+          markdown = "![Mathematica graphics](" <> url <> ")";
+          copyToClipboard[markdown];
+          PrependTo[CurrentValue[pnb, {TaggingRules, "ImageUploadHistory"}], 
+             {Thumbnail@Image[img], Button[url, copyToClipboard[url], Appearance -> "Palette"]}];
+          If[Length[CurrentValue[pnb, {TaggingRules, "ImageUploadHistory"}]] > 6, 
+             CurrentValue[pnb, {TaggingRules, "ImageUploadHistory"}] = Most@CurrentValue[pnb, {TaggingRules, "ImageUploadHistory"}]];
+        ];
      
      (* returns available vertical screen space, 
      taking into account screen elements like the taskbar and menu *)
-     
      screenHeight[] := -Subtract @@ 
         Part[ScreenRectangle /. Options[$FrontEnd, ScreenRectangle], 2];
      
@@ -101,7 +120,7 @@ Global`palette = PaletteNotebook@DynamicModule[{},
           Scrollbars -> Automatic, AppearanceElements -> {}, 
           ImageMargins -> 0
           ],
-         Item[ChoiceButtons[{"Upload and copy MarkDown"}, {stackCopyMarkdown[img]; DialogReturn[]}], Alignment -> Right]
+         Item[ChoiceButtons[{"Upload and copy MarkDown"}, {uploadButtonAction[img]; DialogReturn[]}], Alignment -> Right]
          }],
        WindowTitle -> "Upload image to StackExchange?"
        ];
@@ -145,6 +164,10 @@ Global`palette = PaletteNotebook@DynamicModule[{},
        ];
      ) 
    (* init end *)
-   ]
+   ],
+
+   TaggingRules -> {"ImageUploadHistory" -> {}},
+   WindowTitle -> "SE Uploader"
+]
 
 End[];
