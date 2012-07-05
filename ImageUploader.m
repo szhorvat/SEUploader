@@ -20,18 +20,16 @@ Global`palette = PaletteNotebook[DynamicModule[{},
       Unevaluated@Sequence[]
       ],
 
-      Button["History...", 
-        MessageDialog[
-          Column[{Style["Click an URL to copy it", Bold],
-                  Grid@CurrentValue[pnb, {TaggingRules, "ImageUploadHistory"}]}], 
-          WindowTitle -> "History", WindowSize -> {360, All}],
-        Appearance -> "Palette"]
+      Button["History...", historyDialog[], Appearance -> "Palette"] 
      }],
    
    (* init start *)
    Initialization :>
     (
+     (* always refers to the palette notebook *)
      pnb = EvaluationNotebook[];
+     
+     (* stackImage uploads an image to SE and returns the image URL *)
      
      stackImage::httperr = "Server returned respose code: `1`";
      stackImage::err = "Server returner error: `1`";
@@ -58,13 +56,13 @@ Global`palette = PaletteNotebook[DynamicModule[{},
         client = JLink`JavaNew["org.apache.commons.httpclient.HttpClient"];
         method = JLink`JavaNew["org.apache.commons.httpclient.methods.PostMethod", url];
         partSource = JLink`JavaNew[
-						"org.apache.commons.httpclient.methods.multipart.ByteArrayPartSource", "mmagraphics.png", 
-          				JLink`MakeJavaObject[data]@toCharArray[]];
+                        "org.apache.commons.httpclient.methods.multipart.ByteArrayPartSource", "mmagraphics.png", 
+                        JLink`MakeJavaObject[data]@toCharArray[]];
         part = JLink`JavaNew["org.apache.commons.httpclient.methods.multipart.FilePart", "name", partSource];
         part@setContentType["image/png"];
         entity = JLink`JavaNew[
-         			"org.apache.commons.httpclient.methods.multipart.MultipartRequestEntity", 
-         			{part}, method@getParams[]];
+                    "org.apache.commons.httpclient.methods.multipart.MultipartRequestEntity", 
+                    {part}, method@getParams[]];
         method@setRequestEntity[entity];
         code = client@executeMethod[method];
         response = method@getResponseBodyAsString[];
@@ -80,7 +78,7 @@ Global`palette = PaletteNotebook[DynamicModule[{},
         Message[stackImage::err, error]; $Failed]
        ];
 
-
+     (* Copy text to the clipboard.  Works on v7. *)
      copyToClipboard[text_] := 
       Module[{nb},
        nb = NotebookCreate[Visible -> False];
@@ -89,6 +87,16 @@ Global`palette = PaletteNotebook[DynamicModule[{},
        FrontEndTokenExecute[nb, "Copy"];
        NotebookClose[nb];
      ];
+     
+     historyDialog[] :=         
+        MessageDialog[
+          Column[{
+          	Style["Click a thumbnail to copy its URL.", Bold],
+            Grid@Partition[PadRight[
+          	  Button[#1, copyToClipboard[#2], Appearance -> "Palette"] & @@@ CurrentValue[pnb, {TaggingRules, "ImageUploadHistory"}], 
+           	  9, ""], 3]
+          }], 
+          WindowTitle -> "History", WindowSize -> {450, All}];
 
      uploadButtonAction[img_] :=
         Module[
@@ -100,8 +108,8 @@ Global`palette = PaletteNotebook[DynamicModule[{},
           markdown = "![Mathematica graphics](" <> url <> ")";
           copyToClipboard[markdown];
           PrependTo[CurrentValue[pnb, {TaggingRules, "ImageUploadHistory"}], 
-             {Thumbnail@Image[img], With[{u=url}, Button[u, copyToClipboard[u], Appearance -> "Palette"]]}];
-          If[Length[CurrentValue[pnb, {TaggingRules, "ImageUploadHistory"}]] > 6, 
+             {Thumbnail@Image[img], url}];
+          If[Length[CurrentValue[pnb, {TaggingRules, "ImageUploadHistory"}]] > 9, 
              CurrentValue[pnb, {TaggingRules, "ImageUploadHistory"}] = Most@CurrentValue[pnb, {TaggingRules, "ImageUploadHistory"}]];
         ];
      
