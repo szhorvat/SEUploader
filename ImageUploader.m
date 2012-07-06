@@ -5,22 +5,28 @@ Begin["SEUploader`"];
 Global`palette = PaletteNotebook[DynamicModule[{},
    
    Column[{
-     Button["Upload to SE",
-      With[{img = rasterizeSelection1[]}, 
-       If[img === $Failed, Beep[], uploadWithPreview[img]]],
-      Appearance -> "Palette"],
+   	 Tooltip[
+      Button["Upload to SE",
+       With[{img = rasterizeSelection1[]}, 
+        If[img === $Failed, Beep[], uploadWithPreview[img]]],
+       Appearance -> "Palette"],
+       "Upload the selected expression as an image to StackExchange", TooltipDelay -> Automatic],
      
      If[$OperatingSystem === "Windows",
       
-      Button["Upload to SE (pp)",
-       With[{img = rasterizeSelection2[]}, 
-        If[img === $Failed, Beep[], uploadWithPreview[img]]],
-       Appearance -> "Palette"],
+      Tooltip[
+       Button["Upload to SE (pp)",
+        With[{img = rasterizeSelection2[]}, 
+         If[img === $Failed, Beep[], uploadWithPreview[img]]],
+        Appearance -> "Palette"],
+      "Upload the selected experssion as an image to StackExchange\n(pixel-perfect rasterization)", TooltipDelay -> Automatic],
       
       Unevaluated@Sequence[]
       ],
 
-      Button["History...", historyDialog[], Appearance -> "Palette"] 
+      Tooltip[
+      	Button["History...", historyDialog[], Appearance -> "Palette"],
+      	"See previously uploaded images and copy their URLs", TooltipDelay -> Automatic] 
      }],
    
    (* init start *)
@@ -93,7 +99,7 @@ Global`palette = PaletteNotebook[DynamicModule[{},
           Column[{
           	Style["Click a thumbnail to copy its URL.", Bold],
             Grid@Partition[PadRight[
-          	  Button[#1, copyToClipboard[#2], Appearance -> "Palette"] & @@@ CurrentValue[pnb, {TaggingRules, "ImageUploadHistory"}], 
+          	  Tooltip[Button[#1, copyToClipboard[#2], Appearance -> "Palette"], #2, TooltipDelay -> Automatic] & @@@ CurrentValue[pnb, {TaggingRules, "ImageUploadHistory"}], 
            	  9, ""], 3]
           }], 
           WindowTitle -> "History", WindowSize -> {450, All}];
