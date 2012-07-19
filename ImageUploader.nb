@@ -4,23 +4,23 @@ Cell[CellGroupData[{
 Cell["StackExchange image uploader palette", "Section"],
 
 Cell[TextData[{
- "Evaluate the cell below to create the palette.  Then you can pop out the \
-palette from the main notebook using the small button at the top (",
- Cell[BoxData[
-  GraphicsBox[
-   TagBox[RasterBox[CompressedData["
-1:eJxTTMoPSmJmYGDgB2JBIAax/9MXzJ8/3x43AMqiqd+/fz9QHI+BmLJwLfWo
-gEgtcEGStKB5hEgt+2GAGC1AQJIWuMvJ0EK8X3ABrFoguoiP/fv37+/HCzDt
-vY8XoCkGANgtWG4=
-     "], {{0, 15}, {17, 0}}, {0, 255},
-     ColorFunction->RGBColor],
-    BoxForm`ImageTag["Byte", ColorSpace -> "RGB", Interleaving -> True],
-    Selectable->False],
-   BaseStyle->"ImageGraphics",
-   ImageSize->Automatic,
-   ImageSizeRaw->{17, 15},
-   PlotRange->{{0, 17}, {0, 15}}]], "Input"],
- ") and use Palettes \[Rule] Install Palette... to install it permanently."
+ "Installation instructions:\n\n  1. Download the zipped package ",
+ ButtonBox["from GitHub",
+  BaseStyle->"Hyperlink",
+  ButtonData->{
+    URL["https://github.com/szhorvat/SEUploader/downloads"], None},
+  ButtonNote->"https://github.com/szhorvat/SEUploader/downloads"],
+ ".\n  2. Extract the contents of the archive into a directory.\n  3. Open ",
+ StyleBox["ImageUploader.nb", "Program"],
+ " (this file), and evaluate the ",
+ StyleBox["complete",
+  FontSlant->"Italic"],
+ " notebook.  This will create a palette.\n  4. Use the Palettes \[Rule] \
+Install palette... menu item to install the palette.  If you are upgrading, \
+make sure you use the same name you used before\[LongDash]this will make sure \
+that the old version gets overwritten.\n  5. Close the paltte, and re-open it \
+using the Palettes menu.  This will activate your old settings and it will \
+make sure that the settings you change get remembered. "
 }], "Text"],
 
 Cell[TextData[{
@@ -369,14 +369,24 @@ Cell[BoxData[{
   RowBox[{"SetDirectory", "[", 
    RowBox[{"NotebookDirectory", "[", "]"}], "]"}], 
   ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"CurrentValue", "[", 
+    RowBox[{"$FrontEnd", ",", 
+     RowBox[{"{", 
+      RowBox[{"TaggingRules", ",", "\"\<SEUploaderVersion\>\""}], "}"}]}], 
+    "]"}], "=", 
+   RowBox[{"Import", "[", 
+    RowBox[{"\"\<version\>\"", ",", "\"\<Text\>\""}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
  RowBox[{"Get", "[", "\"\<ImageUploader.m\>\"", "]"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{"ResetDirectory", "[", "]"}], ";"}], "\[IndentingNewLine]", 
  RowBox[{"CreatePalette", "[", "palette", "]"}]}], "Input"]
 }, Open  ]]
 },
-WindowSize->{715, 559},
-WindowMargins->{{81, Automatic}, {Automatic, 46}},
+WindowSize->{710, 577},
+WindowMargins->{{81, Automatic}, {58, Automatic}},
 PrivateNotebookOptions->{"FileOutlineCache"->False},
 TrackCellChangeTimes->False,
 FrontEndVersion->"8.0 for Microsoft Windows (32-bit) (October 6, 2011)",

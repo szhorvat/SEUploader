@@ -2,6 +2,8 @@
 
 Begin["SEUploader`"];
 
+With[{lversion = Import["version", "Text"]},
+
 Global`palette = PaletteNotebook[DynamicModule[{},
    
    Column[{
@@ -26,7 +28,15 @@ Global`palette = PaletteNotebook[DynamicModule[{},
 
       Tooltip[
       	Button["History...", historyDialog[], Appearance -> "Palette"],
-      	"See previously uploaded images and copy their URLs", TooltipDelay -> Automatic] 
+      	"See previously uploaded images and copy their URLs", TooltipDelay -> Automatic],
+      	
+      Tooltip[
+      	Button["Update check...", checkForUpdate[], 
+      		Appearance -> "Palette",
+      		Background -> Dynamic@If[CurrentValue[$FrontEnd, {TaggingRules, "SEUploaderVersion"}]  =!= version, LightRed, Automatic]
+      	],
+      	"Check for newer versions of the uploader palette", TooltipDelay -> Automatic] 
+ 
      }],
    
    (* init start *)
@@ -34,6 +44,38 @@ Global`palette = PaletteNotebook[DynamicModule[{},
     (
      (* always refers to the palette notebook *)
      pnb = EvaluationNotebook[];
+          
+     (* VERSION CHECK CODE *)
+     
+     (* the palette version *)
+     version = lversion;
+     
+     (* check the latest version on GitHub *)
+     checkOnlineVersion[] := 
+      Module[{onlineVersion},
+      	Quiet@Check[
+      		onlineVersion = Import["https://raw.github.com/szhorvat/SEUploader/master/version"],
+      		Return[$Failed]
+      	];
+      	CurrentValue[$FrontEnd, {TaggingRules, "SEUploaderVersion"}] = onlineVersion
+      ];
+      
+     checkForUpdate[] :=
+      Module[{},
+      	If[checkOnlineVersion[] =!= $Failed,
+	      	MessageDialog[StringForm["Online version: `1`\nInstalled version: `2`",
+	      	 CurrentValue[$FrontEnd, {TaggingRules, "SEUploaderVersion"}],
+	      	 version],
+	      	 WindowTitle -> "Version information"],
+	     
+	     	MessageDialog[
+	     	 StringForm["Update check failed. Please check your internet connection.\nInstalled version: ``", version],
+	     	 WindowTitle -> "Version information"
+	     	] 	 
+      	]
+      ];
+    
+     (* IMAGE UPLOAD CODE *)
      
      (* stackImage uploads an image to SE and returns the image URL *)
      
@@ -182,6 +224,8 @@ Global`palette = PaletteNotebook[DynamicModule[{},
 
    TaggingRules -> {"ImageUploadHistory" -> {}},
    WindowTitle -> "SE Uploader"
+]
+
 ]
 
 End[];
