@@ -63,18 +63,18 @@ Global`palette = PaletteNotebook[DynamicModule[{},
       ];
       
      checkForUpdate[] :=
-      Module[{},
-      	If[checkOnlineVersion[] =!= $Failed,
-	      	MessageDialog[StringForm["Online version: `1`\nInstalled version: `2`",
-	      	 CurrentValue[$FrontEnd, {TaggingRules, "SEUploaderVersion"}],
-	      	 version],
-	      	 WindowTitle -> "Version information"],
-	     
-	     	MessageDialog[
-	     	 StringForm["Update check failed. Please check your internet connection.\nInstalled version: ``", version],
-	     	 WindowTitle -> "Version information"
-	     	] 	 
-      	]
+      Module[{res},
+      	res = checkOnlineVersion[];
+      	MessageDialog[
+      	 StringForm["`1`\nInstalled version: `2`\n\n`3`",
+      	  If[res =!= $Failed,
+      	    StringForm["Online version: `1`", CurrentValue[$FrontEnd, {TaggingRules, "SEUploaderVersion"}]],
+      	    "Update check failed.  Please check your internet connection."
+      	  ],
+      	  version,
+      	  Hyperlink["Click here to see the history of changes", "https://github.com/szhorvat/SEUploader/commits/master"]
+      	 ],
+      	 WindowTitle -> "Version information"]
       ];
     
      (* IMAGE UPLOAD CODE *)
