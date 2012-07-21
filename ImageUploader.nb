@@ -18,9 +18,9 @@ Cell[TextData[{
  " notebook.  This will create a palette.\n  4. Use the Palettes \[Rule] \
 Install palette... menu item to install the palette.  If you are upgrading, \
 make sure you use the same name you used before\[LongDash]this will make sure \
-that the old version gets overwritten.\n  5. Close the paltte, and re-open it \
-using the Palettes menu.  This will activate your old settings and it will \
-make sure that the settings you change get remembered. "
+that the old version gets overwritten.\n  5. Close the palette, and re-open \
+it using the Palettes menu.  This will activate your old settings and it will \
+make sure that any newly changed settings will get remembered."
 }], "Text"],
 
 Cell[TextData[{

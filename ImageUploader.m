@@ -33,7 +33,9 @@ Global`palette = PaletteNotebook[DynamicModule[{},
       Tooltip[
       	Button["Update check...", checkForUpdate[], 
       		Appearance -> "Palette",
-      		Background -> Dynamic@If[CurrentValue[$FrontEnd, {TaggingRules, "SEUploaderVersion"}]  =!= version, LightRed, Automatic]
+      		Background -> Dynamic@If[CurrentValue[$FrontEnd, {TaggingRules, "SEUploaderVersion"}]  =!= version, 
+      			                      LightMagenta, 
+      			                      Automatic]
       	],
       	"Check for newer versions of the uploader palette", TooltipDelay -> Automatic] 
  
@@ -47,7 +49,7 @@ Global`palette = PaletteNotebook[DynamicModule[{},
           
      (* VERSION CHECK CODE *)
      
-     (* the palette version *)
+     (* the palette version number, stored as a string *)
      version = lversion;
      
      (* check the latest version on GitHub *)
@@ -141,7 +143,7 @@ Global`palette = PaletteNotebook[DynamicModule[{},
           Column[{
           	Style["Click a thumbnail to copy its URL.", Bold],
             Grid@Partition[PadRight[
-          	  Tooltip[Button[#1, copyToClipboard[#2], Appearance -> "Palette"], #2, TooltipDelay -> Automatic] & @@@ CurrentValue[pnb, {TaggingRules, "ImageUploadHistory"}], 
+          	  Tooltip[Button[#1, copyToClipboard[#2]; DialogReturn[], Appearance -> "Palette"], #2, TooltipDelay -> Automatic] & @@@ CurrentValue[pnb, {TaggingRules, "ImageUploadHistory"}], 
            	  9, ""], 3]
           }], 
           WindowTitle -> "History", WindowSize -> {450, All}];
