@@ -61,6 +61,15 @@ Global`palette = PaletteNotebook[DynamicModule[{},
       	];
       	CurrentValue[$FrontEnd, {TaggingRules, "SEUploaderVersion"}] = onlineVersion
       ];
+     
+     (* Check for updates on initialization if last check was > 5 days ago.
+        The check will time out after 6 seconds. *) 
+     If[
+	    AbsoluteTime[] > 5*3600*24 + CurrentValue[$FrontEnd, {TaggingRules, "SEUploaderLastUpdateCheck"}, 0],
+ 		If[TimeConstrained[SEUploader`checkOnlineVersion[], 6, $Failed] =!= $Failed,
+  		   CurrentValue[$FrontEnd, {TaggingRules, "SEUploaderLastUpdateCheck"}] = AbsoluteTime[]
+        ]
+     ];
       
      checkForUpdate[] :=
       Module[{res},
