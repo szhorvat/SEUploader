@@ -89,7 +89,11 @@ Global`palette = PaletteNotebook[DynamicModule[{},
       	      "Update check failed.  Please check your internet connection."
       	    ],
       	    version,
-      	    Hyperlink["Click here to see the history of changes", "https://github.com/szhorvat/SEUploader/commits/master"]
+      	    Row[{ 
+      	    	Hyperlink["Open home page", "http://meta.mathematica.stackexchange.com/a/32/12"], 
+      	    	" | ", 
+      	    	Hyperlink["History of changes", "https://github.com/szhorvat/SEUploader/commits/master"]
+      	    }]
       	   ],
       	 
       	   Item[
@@ -99,7 +103,7 @@ Global`palette = PaletteNotebook[DynamicModule[{},
       	   		
       	   	  ChoiceButtons[{"Update to new version"}, {onlineUpdate[]; DialogReturn[]}],
       	   	  
-      	   	  CancelButton[]
+      	   	  CancelButton[ImageMargins -> {{2,2}, {10,10}}]
       	   	],
       	   	ItemSize -> 40, 
       	   	Alignment -> Right]

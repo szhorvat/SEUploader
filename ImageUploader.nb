@@ -384,6 +384,15 @@ Cell[BoxData[{
        "\"\<SEUploaderLatest.nb\>\""}], "}"}], "]"}]}], "]"}], 
   ";"}], "\[IndentingNewLine]", 
  RowBox[{
+  RowBox[{"NotebookSave", "[", 
+   RowBox[{"nb", ",", 
+    RowBox[{"FileNameJoin", "[", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"NotebookDirectory", "[", "]"}], ",", 
+       "\"\<SE Uploader.nb\>\""}], "}"}], "]"}]}], "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
   RowBox[{"NotebookClose", "[", "nb", "]"}], ";"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{"ResetDirectory", "[", "]"}], ";"}]}], "Input"]
