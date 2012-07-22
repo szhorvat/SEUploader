@@ -9,8 +9,7 @@ Global`palette = PaletteNotebook[DynamicModule[{},
    Column[{
    	 Tooltip[
       Button["Upload to SE",
-       With[{img = rasterizeSelection1[]}, 
-        If[img === $Failed, Beep[], uploadWithPreview[img]]],
+       uploadButton[],
        Appearance -> "Palette"],
        "Upload the selected expression as an image to StackExchange", TooltipDelay -> Automatic],
      
@@ -18,8 +17,7 @@ Global`palette = PaletteNotebook[DynamicModule[{},
       
       Tooltip[
        Button["Upload to SE (pp)",
-        With[{img = rasterizeSelection2[]}, 
-         If[img === $Failed, Beep[], uploadWithPreview[img]]],
+        uploadPPButton[],
         Appearance -> "Palette"],
       "Upload the selected experssion as an image to StackExchange\n(pixel-perfect rasterization)", TooltipDelay -> Automatic],
       
@@ -27,13 +25,13 @@ Global`palette = PaletteNotebook[DynamicModule[{},
       ],
 
       Tooltip[
-      	Button["History...", historyDialog[], Appearance -> "Palette"],
+      	Button["History...", historyButton[], Appearance -> "Palette"],
       	"See previously uploaded images and copy their URLs", TooltipDelay -> Automatic],
       	
       Tooltip[
-      	Button["Update check...", checkForUpdate[], 
+      	Button["Update...", updateButton[], 
       		Appearance -> "Palette",
-      		Background -> Dynamic@If[CurrentValue[$FrontEnd, {TaggingRules, "SEUploaderVersion"}]  =!= version, 
+      		Background -> Dynamic@If[CurrentValue[$FrontEnd, {TaggingRules, "SEUploaderVersion"}, version]  =!= version, 
       			                      LightMagenta, 
       			                      Automatic]
       	],
@@ -59,32 +57,58 @@ Global`palette = PaletteNotebook[DynamicModule[{},
       		onlineVersion = Import["https://raw.github.com/szhorvat/SEUploader/master/version"],
       		Return[$Failed]
       	];
+      	CurrentValue[$FrontEnd, {TaggingRules, "SEUploaderLastUpdateCheck"}] = AbsoluteTime[];
       	CurrentValue[$FrontEnd, {TaggingRules, "SEUploaderVersion"}] = onlineVersion
       ];
      
-     (* Check for updates on initialization if last check was > 5 days ago.
+     (* Check for updates on initialization if last check was > 3 days ago.
         The check will time out after 6 seconds. *) 
-     If[
-	    AbsoluteTime[] > 5*3600*24 + CurrentValue[$FrontEnd, {TaggingRules, "SEUploaderLastUpdateCheck"}, 0],
- 		If[TimeConstrained[SEUploader`checkOnlineVersion[], 6, $Failed] =!= $Failed,
-  		   CurrentValue[$FrontEnd, {TaggingRules, "SEUploaderLastUpdateCheck"}] = AbsoluteTime[]
-        ]
+     If[AbsoluteTime[] > 3*3600*24 + CurrentValue[$FrontEnd, {TaggingRules, "SEUploaderLastUpdateCheck"}, 0],
+ 		TimeConstrained[SEUploader`checkOnlineVersion[], 6]
      ];
+     
+     onlineUpdate[] :=
+       Module[{newPalette, paletteFileName, paletteDirectory},
+       	newPalette = Import["http://github.com/downloads/szhorvat/SEUploader/SEUploaderLatest.nb", "String"];
+       	If[newPalette === $Failed, Beep[]; Return[]];
+       	paletteFileName = NotebookFileName[pnb];
+       	paletteDirectory = NotebookDirectory[pnb];
+       	NotebookClose[pnb];
+       	Export[paletteFileName, newPalette, "String"];
+       	FrontEndTokenExecute["OpenFromPalettesMenu", paletteFileName];
+       ];
       
-     checkForUpdate[] :=
+     updateButton[] :=
       Module[{res},
       	res = checkOnlineVersion[];
-      	MessageDialog[
-      	 StringForm["`1`\nInstalled version: `2`\n\n`3`",
-      	  If[res =!= $Failed,
-      	    StringForm["Online version: `1`", CurrentValue[$FrontEnd, {TaggingRules, "SEUploaderVersion"}]],
-      	    "Update check failed.  Please check your internet connection."
-      	  ],
-      	  version,
-      	  Hyperlink["Click here to see the history of changes", "https://github.com/szhorvat/SEUploader/commits/master"]
-      	 ],
+      	CreateDialog[
+      	 Column[{
+      	   StringForm["`1`\nInstalled version: `2`\n\n`3`",
+      	    If[res =!= $Failed,
+      	      "Online version: " <> ToString@CurrentValue[$FrontEnd, {TaggingRules, "SEUploaderVersion"}],
+      	      "Update check failed.  Please check your internet connection."
+      	    ],
+      	    version,
+      	    Hyperlink["Click here to see the history of changes", "https://github.com/szhorvat/SEUploader/commits/master"]
+      	   ],
+      	 
+      	   Item[
+      	   	If[res =!= $Failed 
+      	   		&& CurrentValue[$FrontEnd, {TaggingRules, "SEUploaderVersion"}, version] =!= version
+      	   		&& FileNameSplit@NotebookDirectory[pnb] === Join[FileNameSplit[$UserBaseDirectory], {"SystemFiles", "FrontEnd", "Palettes"}],
+      	   		
+      	   	  ChoiceButtons[{"Update to new version"}, {onlineUpdate[]; DialogReturn[]}],
+      	   	  
+      	   	  CancelButton[]
+      	   	],
+      	   	ItemSize -> 40, 
+      	   	Alignment -> Right]
+      	 }],
+      	 
       	 WindowTitle -> "Version information"]
       ];
+      
+      
     
      (* IMAGE UPLOAD CODE *)
      
@@ -147,16 +171,29 @@ Global`palette = PaletteNotebook[DynamicModule[{},
        NotebookClose[nb];
      ];
      
-     historyDialog[] :=         
+     historyButton[] :=         
         MessageDialog[
           Column[{
           	Style["Click a thumbnail to copy its URL.", Bold],
             Grid@Partition[PadRight[
-          	  Tooltip[Button[#1, copyToClipboard[#2]; DialogReturn[], Appearance -> "Palette"], #2, TooltipDelay -> Automatic] & @@@ CurrentValue[pnb, {TaggingRules, "ImageUploadHistory"}], 
+          	  Tooltip[
+          	  	Button[#1, copyToClipboard[#2]; DialogReturn[], Appearance -> "Palette"], 
+          	  	#2, TooltipDelay -> Automatic] & @@@ 
+          	  CurrentValue[pnb, {TaggingRules, "ImageUploadHistory"}, {}], 
            	  9, ""], 3]
           }], 
           WindowTitle -> "History", WindowSize -> {450, All}];
 
+	 uploadButton[] :=
+	   With[{img = rasterizeSelection1[]}, 
+        If[img === $Failed, Beep[], uploadWithPreview[img]]];
+
+     uploadPPButton[] := 
+       With[{img = rasterizeSelection2[]}, 
+        If[img === $Failed, Beep[], uploadWithPreview[img]]];
+
+
+     (* button from the upload dialog *)
      uploadButtonAction[img_] :=
         Module[
           {url, markdown},
@@ -173,7 +210,7 @@ Global`palette = PaletteNotebook[DynamicModule[{},
         ];
      
      (* returns available vertical screen space, 
-     taking into account screen elements like the taskbar and menu *)
+        taking into account screen elements like the taskbar and menu *)
      screenHeight[] := -Subtract @@ 
         Part[ScreenRectangle /. Options[$FrontEnd, ScreenRectangle], 2];
      
@@ -193,7 +230,7 @@ Global`palette = PaletteNotebook[DynamicModule[{},
        ];
      
      (* Multiplatform, fixed-width version.  
-     The default max width is 650 to fit StackExchange *)
+        The default max width is 650 to fit StackExchange *)
      rasterizeSelection1[maxWidth_: 650] := 
       Module[{target, selection, image},
        selection = NotebookRead[SelectedNotebook[]];

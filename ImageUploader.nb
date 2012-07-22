@@ -369,24 +369,28 @@ Cell[BoxData[{
   RowBox[{"SetDirectory", "[", 
    RowBox[{"NotebookDirectory", "[", "]"}], "]"}], 
   ";"}], "\[IndentingNewLine]", 
- RowBox[{
-  RowBox[{
-   RowBox[{"CurrentValue", "[", 
-    RowBox[{"$FrontEnd", ",", 
-     RowBox[{"{", 
-      RowBox[{"TaggingRules", ",", "\"\<SEUploaderVersion\>\""}], "}"}]}], 
-    "]"}], "=", 
-   RowBox[{"Import", "[", 
-    RowBox[{"\"\<version\>\"", ",", "\"\<Text\>\""}], "]"}]}], 
-  ";"}], "\[IndentingNewLine]", 
  RowBox[{"Get", "[", "\"\<ImageUploader.m\>\"", "]"}], "\[IndentingNewLine]", 
  RowBox[{
-  RowBox[{"ResetDirectory", "[", "]"}], ";"}], "\[IndentingNewLine]", 
- RowBox[{"CreatePalette", "[", "palette", "]"}]}], "Input"]
+  RowBox[{"nb", "=", 
+   RowBox[{"CreatePalette", "[", "palette", "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"NotebookSave", "[", 
+   RowBox[{"nb", ",", 
+    RowBox[{"FileNameJoin", "[", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"NotebookDirectory", "[", "]"}], ",", 
+       "\"\<SEUploaderLatest.nb\>\""}], "}"}], "]"}]}], "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"NotebookClose", "[", "nb", "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"ResetDirectory", "[", "]"}], ";"}]}], "Input"]
 }, Open  ]]
 },
 WindowSize->{710, 577},
-WindowMargins->{{81, Automatic}, {58, Automatic}},
+WindowMargins->{{190, Automatic}, {Automatic, 41}},
 PrivateNotebookOptions->{"FileOutlineCache"->False},
 TrackCellChangeTimes->False,
 FrontEndVersion->"8.0 for Microsoft Windows (32-bit) (October 6, 2011)",
