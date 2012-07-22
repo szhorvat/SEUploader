@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       157,          7]
-NotebookDataLength[     13692,        332]
-NotebookOptionsPosition[     13356,        316]
-NotebookOutlinePosition[     13782,        334]
-CellTagsIndexPosition[     13739,        331]
+NotebookDataLength[     13694,        332]
+NotebookOptionsPosition[     13358,        316]
+NotebookOutlinePosition[     13784,        334]
+CellTagsIndexPosition[     13741,        331]
 WindowTitle->SE Uploader
 WindowFrame->Palette*)
 
@@ -88,7 +88,7 @@ StackExchange\\n(pixel-perfect rasterization)\"",
    "Column"],
   DynamicModuleValues:>{},
   Initialization:>(SEUploader`pnb = EvaluationNotebook[]; 
-   SEUploader`version = "103"; 
+   SEUploader`version = "104"; 
    SEUploader`checkOnlineVersion[] := Module[{SEUploader`onlineVersion}, Quiet[
         Check[
         SEUploader`onlineVersion = 
@@ -107,7 +107,7 @@ StackExchange\\n(pixel-perfect rasterization)\"",
     Module[{SEUploader`newPalette, SEUploader`paletteFileName, 
        SEUploader`paletteDirectory}, 
       SEUploader`newPalette = 
-       Import["http://github.com/downloads/szhorvat/SEUploader/\
+       Import["https://raw.github.com/szhorvat/SEUploader/master/\
 SEUploaderLatest.nb", "String"]; 
       If[SEUploader`newPalette === $Failed, Beep[]; Return[]]; 
       SEUploader`paletteFileName = NotebookFileName[SEUploader`pnb]; 
@@ -333,7 +333,7 @@ CellTagsIndex->{}
 *)
 (*NotebookFileOutline
 Notebook[{
-Cell[583, 21, 12769, 293, 85, InheritFromParent]
+Cell[583, 21, 12771, 293, 85, InheritFromParent]
 }
 ]
 *)

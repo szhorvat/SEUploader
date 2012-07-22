@@ -4,7 +4,18 @@ Cell[CellGroupData[{
 Cell["StackExchange image uploader palette", "Section"],
 
 Cell[TextData[{
- "Installation instructions:\n\n  1. Download the zipped package ",
+ "This notebook is used to build the image uploader palette from the source \
+package.  Please see the ",
+ ButtonBox["homepage",
+  BaseStyle->"Hyperlink",
+  ButtonData->{
+    URL["http://meta.mathematica.stackexchange.com/a/32/12"], None},
+  ButtonNote->"http://meta.mathematica.stackexchange.com/a/32/12"],
+ " for end user installation instructions."
+}], "Text"],
+
+Cell[TextData[{
+ "Build instructions:\n\n  1. Download the zipped package ",
  ButtonBox["from GitHub",
   BaseStyle->"Hyperlink",
   ButtonData->{
@@ -15,12 +26,7 @@ Cell[TextData[{
  " (this file), and evaluate the ",
  StyleBox["complete",
   FontSlant->"Italic"],
- " notebook.  This will create a palette.\n  4. Use the Palettes \[Rule] \
-Install palette... menu item to install the palette.  If you are upgrading, \
-make sure you use the same name you used before\[LongDash]this will make sure \
-that the old version gets overwritten.\n  5. Close the palette, and re-open \
-it using the Palettes menu.  This will activate your old settings and it will \
-make sure that any newly changed settings will get remembered."
+ " notebook.  This will save the palette in the same location as the package."
 }], "Text"],
 
 Cell[TextData[{

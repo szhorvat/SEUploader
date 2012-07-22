@@ -69,7 +69,7 @@ Global`palette = PaletteNotebook[DynamicModule[{},
      
      onlineUpdate[] :=
        Module[{newPalette, paletteFileName, paletteDirectory},
-       	newPalette = Import["http://github.com/downloads/szhorvat/SEUploader/SEUploaderLatest.nb", "String"];
+       	newPalette = Import["https://raw.github.com/szhorvat/SEUploader/master/SEUploaderLatest.nb", "String"];
        	If[newPalette === $Failed, Beep[]; Return[]];
        	paletteFileName = NotebookFileName[pnb];
        	paletteDirectory = NotebookDirectory[pnb];
