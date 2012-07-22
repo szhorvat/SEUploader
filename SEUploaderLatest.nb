@@ -1,0 +1,342 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 8.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       157,          7]
+NotebookDataLength[     13692,        332]
+NotebookOptionsPosition[     13356,        316]
+NotebookOutlinePosition[     13782,        334]
+CellTagsIndexPosition[     13739,        331]
+WindowTitle->SE Uploader
+WindowFrame->Palette*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[
+ DynamicModuleBox[{}, 
+  TagBox[GridBox[{
+     {
+      TagBox[
+       TooltipBox[
+        ButtonBox["\<\"Upload to SE\"\>",
+         Appearance->"Palette",
+         ButtonFunction:>SEUploader`uploadButton[],
+         Evaluator->Automatic,
+         Method->"Preemptive"],
+        "\"Upload the selected expression as an image to StackExchange\"",
+        TooltipDelay->Automatic,
+        TooltipStyle->"TextStyling"],
+       Annotation[#, 
+        "Upload the selected expression as an image to StackExchange", 
+        "Tooltip"]& ]},
+     {
+      TagBox[
+       TooltipBox[
+        ButtonBox["\<\"Upload to SE (pp)\"\>",
+         Appearance->"Palette",
+         ButtonFunction:>SEUploader`uploadPPButton[],
+         Evaluator->Automatic,
+         Method->"Preemptive"],
+        "\"Upload the selected experssion as an image to \
+StackExchange\\n(pixel-perfect rasterization)\"",
+        TooltipDelay->Automatic,
+        TooltipStyle->"TextStyling"],
+       Annotation[#, 
+        "Upload the selected experssion as an image to StackExchange\n\
+(pixel-perfect rasterization)", "Tooltip"]& ]},
+     {
+      TagBox[
+       TooltipBox[
+        ButtonBox["\<\"History...\"\>",
+         Appearance->"Palette",
+         ButtonFunction:>SEUploader`historyButton[],
+         Evaluator->Automatic,
+         Method->"Preemptive"],
+        "\"See previously uploaded images and copy their URLs\"",
+        TooltipDelay->Automatic,
+        TooltipStyle->"TextStyling"],
+       Annotation[#, "See previously uploaded images and copy their URLs", 
+        "Tooltip"]& ]},
+     {
+      TagBox[
+       TooltipBox[
+        ButtonBox["\<\"Update...\"\>",
+         Appearance->"Palette",
+         Background->Dynamic[
+           If[
+           CurrentValue[$FrontEnd, {TaggingRules, "SEUploaderVersion"}, 
+              SEUploader`version] =!= SEUploader`version, LightMagenta, 
+            Automatic]],
+         ButtonFunction:>SEUploader`updateButton[],
+         Evaluator->Automatic,
+         Method->"Preemptive"],
+        "\"Check for newer versions of the uploader palette\"",
+        TooltipDelay->Automatic,
+        TooltipStyle->"TextStyling"],
+       Annotation[#, "Check for newer versions of the uploader palette", 
+        "Tooltip"]& ]}
+    },
+    GridBoxAlignment->{"Columns" -> {{Left}}},
+    GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+   "Column"],
+  DynamicModuleValues:>{},
+  Initialization:>(SEUploader`pnb = EvaluationNotebook[]; 
+   SEUploader`version = "103"; 
+   SEUploader`checkOnlineVersion[] := Module[{SEUploader`onlineVersion}, Quiet[
+        Check[
+        SEUploader`onlineVersion = 
+         Import["https://raw.github.com/szhorvat/SEUploader/master/version"], 
+         Return[$Failed]]]; 
+      CurrentValue[$FrontEnd, {TaggingRules, "SEUploaderLastUpdateCheck"}] = 
+       AbsoluteTime[]; 
+      CurrentValue[$FrontEnd, {TaggingRules, "SEUploaderVersion"}] = 
+       SEUploader`onlineVersion]; 
+   If[AbsoluteTime[] > 
+     3 3600 24 + 
+      CurrentValue[$FrontEnd, {TaggingRules, "SEUploaderLastUpdateCheck"}, 0], 
+     TimeConstrained[
+      SEUploader`checkOnlineVersion[], 6]]; 
+   SEUploader`onlineUpdate[] := 
+    Module[{SEUploader`newPalette, SEUploader`paletteFileName, 
+       SEUploader`paletteDirectory}, 
+      SEUploader`newPalette = 
+       Import["http://github.com/downloads/szhorvat/SEUploader/\
+SEUploaderLatest.nb", "String"]; 
+      If[SEUploader`newPalette === $Failed, Beep[]; Return[]]; 
+      SEUploader`paletteFileName = NotebookFileName[SEUploader`pnb]; 
+      SEUploader`paletteDirectory = NotebookDirectory[SEUploader`pnb]; 
+      NotebookClose[SEUploader`pnb]; 
+      Export[SEUploader`paletteFileName, SEUploader`newPalette, "String"]; 
+      FrontEndTokenExecute[
+       "OpenFromPalettesMenu", SEUploader`paletteFileName]; Null]; 
+   SEUploader`updateButton[] := 
+    Module[{SEUploader`res}, SEUploader`res = SEUploader`checkOnlineVersion[]; 
+      CreateDialog[
+        Column[{
+          StringForm["`1`\nInstalled version: `2`\n\n`3`", 
+           If[SEUploader`res =!= $Failed, 
+            StringJoin["Online version: ", 
+             ToString[
+              CurrentValue[$FrontEnd, {TaggingRules, "SEUploaderVersion"}]]], 
+            "Update check failed.  Please check your internet connection."], 
+           SEUploader`version, 
+           Row[{
+             Hyperlink[
+             "Open home page", 
+              "http://meta.mathematica.stackexchange.com/a/32/12"], " | ", 
+             Hyperlink[
+             "History of changes", 
+              "https://github.com/szhorvat/SEUploader/commits/master"]}]], 
+          Item[
+           If[
+            And[
+            SEUploader`res =!= $Failed, 
+             CurrentValue[$FrontEnd, {TaggingRules, "SEUploaderVersion"}, 
+               SEUploader`version] =!= SEUploader`version, FileNameSplit[
+               NotebookDirectory[SEUploader`pnb]] === Join[
+               FileNameSplit[$UserBaseDirectory], {
+               "SystemFiles", "FrontEnd", "Palettes"}]], 
+            
+            ChoiceButtons[{"Update to new version"}, {
+             SEUploader`onlineUpdate[]; DialogReturn[]}], 
+            CancelButton[ImageMargins -> {{2, 2}, {10, 10}}]], ItemSize -> 40,
+            Alignment -> Right]}], WindowTitle -> "Version information"]]; 
+   MessageName[SEUploader`stackImage, "httperr"] = 
+    "Server returned respose code: `1`"; 
+   MessageName[SEUploader`stackImage, "err"] = "Server returner error: `1`"; 
+   SEUploader`stackImage[
+      Pattern[SEUploader`g, 
+       Blank[]]] := 
+    Module[{SEUploader`getVal, SEUploader`url, SEUploader`client, 
+       SEUploader`method, SEUploader`data, SEUploader`partSource, 
+       SEUploader`part, SEUploader`entity, SEUploader`code, 
+       SEUploader`response, SEUploader`error, SEUploader`result}, 
+      SEUploader`getVal[
+         Pattern[SEUploader`res, 
+          Blank[]], 
+         Pattern[SEUploader`key, 
+          Blank[String]]] := 
+       With[{SEUploader`k = StringJoin["var ", SEUploader`key, " = "]}, 
+         StringTrim[
+          First[
+           StringCases[
+            First[
+             Select[SEUploader`res, StringMatchQ[#, 
+               StringExpression[SEUploader`k, 
+                BlankNullSequence[]]]& ]], StringExpression[SEUploader`k, 
+              Pattern[SEUploader`v, 
+               BlankNullSequence[]], ";"] :> SEUploader`v]], "'"]]; 
+      SEUploader`data = ExportString[SEUploader`g, "PNG"]; 
+      JLink`JavaBlock[
+       SEUploader`url = "http://stackoverflow.com/upload/image"; 
+        SEUploader`client = 
+         JLink`JavaNew["org.apache.commons.httpclient.HttpClient"]; 
+        SEUploader`method = 
+         JLink`JavaNew[
+          "org.apache.commons.httpclient.methods.PostMethod", SEUploader`url]; 
+        SEUploader`partSource = 
+         JLink`JavaNew[
+          "org.apache.commons.httpclient.methods.multipart.\
+ByteArrayPartSource", "mmagraphics.png", 
+           JLink`MakeJavaObject[SEUploader`data][
+            SEUploader`toCharArray[]]]; 
+        SEUploader`part = 
+         JLink`JavaNew[
+          "org.apache.commons.httpclient.methods.multipart.FilePart", "name", 
+           SEUploader`partSource]; SEUploader`part[
+          SEUploader`setContentType["image/png"]]; 
+        SEUploader`entity = 
+         JLink`JavaNew[
+          "org.apache.commons.httpclient.methods.multipart.\
+MultipartRequestEntity", {SEUploader`part}, 
+           SEUploader`method[
+            SEUploader`getParams[]]]; SEUploader`method[
+          SEUploader`setRequestEntity[SEUploader`entity]]; 
+        SEUploader`code = SEUploader`client[
+           SEUploader`executeMethod[SEUploader`method]]; 
+        SEUploader`response = SEUploader`method[
+           SEUploader`getResponseBodyAsString[]]; Null]; 
+      If[SEUploader`code =!= 200, Message[
+          MessageName[SEUploader`stackImage, "httperr"], SEUploader`code]; 
+        Return[$Failed]]; SEUploader`response = Map[StringTrim, 
+         StringSplit[SEUploader`response, "\n"]]; 
+      SEUploader`error = SEUploader`getVal[SEUploader`response, "error"]; 
+      SEUploader`result = SEUploader`getVal[SEUploader`response, "result"]; 
+      If[
+        StringMatchQ[SEUploader`result, "http*"], SEUploader`result, Message[
+          MessageName[SEUploader`stackImage, "err"], 
+          SEUploader`error]; $Failed]]; SEUploader`copyToClipboard[
+      Pattern[SEUploader`text, 
+       Blank[]]] := 
+    Module[{$CellContext`nb}, $CellContext`nb = 
+       NotebookCreate[Visible -> False]; NotebookWrite[$CellContext`nb, 
+        Cell[SEUploader`text, "Text"]]; 
+      SelectionMove[$CellContext`nb, All, Notebook]; 
+      FrontEndTokenExecute[$CellContext`nb, "Copy"]; 
+      NotebookClose[$CellContext`nb]; Null]; 
+   SEUploader`historyButton[] := MessageDialog[
+      Column[{
+        Style["Click a thumbnail to copy its URL.", Bold], 
+        Grid[
+         Partition[
+          PadRight[
+           Apply[Tooltip[
+             
+             Button[#, SEUploader`copyToClipboard[#2]; DialogReturn[], 
+              Appearance -> "Palette"], #2, TooltipDelay -> Automatic]& , 
+            CurrentValue[
+            SEUploader`pnb, {TaggingRules, "ImageUploadHistory"}, {}], {1}], 
+           9, ""], 3]]}], WindowTitle -> "History", WindowSize -> {450, All}]; 
+   SEUploader`uploadButton[] := 
+    With[{SEUploader`img = SEUploader`rasterizeSelection1[]}, 
+      If[SEUploader`img === $Failed, 
+       Beep[], 
+       SEUploader`uploadWithPreview[SEUploader`img]]]; 
+   SEUploader`uploadPPButton[] := 
+    With[{SEUploader`img = SEUploader`rasterizeSelection2[]}, 
+      If[SEUploader`img === $Failed, 
+       Beep[], 
+       SEUploader`uploadWithPreview[SEUploader`img]]]; 
+   SEUploader`uploadButtonAction[
+      Pattern[SEUploader`img, 
+       Blank[]]] := 
+    Module[{SEUploader`url, SEUploader`markdown}, 
+      Check[SEUploader`url = SEUploader`stackImage[SEUploader`img], 
+        Return[]]; 
+      SEUploader`markdown = 
+       StringJoin["![Mathematica graphics](", SEUploader`url, ")"]; 
+      SEUploader`copyToClipboard[SEUploader`markdown]; PrependTo[
+        CurrentValue[SEUploader`pnb, {TaggingRules, "ImageUploadHistory"}], {
+         Thumbnail[
+          Image[SEUploader`img]], SEUploader`url}]; If[Length[
+          CurrentValue[SEUploader`pnb, {TaggingRules, "ImageUploadHistory"}]] > 
+        9, CurrentValue[SEUploader`pnb, {TaggingRules, "ImageUploadHistory"}] = 
+        Most[
+          CurrentValue[
+          SEUploader`pnb, {TaggingRules, "ImageUploadHistory"}]]]; Null]; 
+   SEUploader`screenHeight[] := -Apply[Subtract, 
+       Part[
+        ReplaceAll[ScreenRectangle, 
+         Options[$FrontEnd, ScreenRectangle]], 2]]; 
+   SEUploader`uploadWithPreview[
+      Pattern[SEUploader`img, 
+       Blank[Image]]] := CreateDialog[
+      Column[{
+        Style["Upload image to StackExchange network?", Bold], 
+        Pane[
+         Image[SEUploader`img, Magnification -> 1], {Automatic, 
+          Min[SEUploader`screenHeight[] - 140, 1 + Part[
+             ImageDimensions[SEUploader`img], 2]]}, Scrollbars -> Automatic, 
+         AppearanceElements -> {}, ImageMargins -> 0], 
+        Item[
+         ChoiceButtons[{"Upload and copy MarkDown"}, {
+          SEUploader`uploadButtonAction[SEUploader`img]; DialogReturn[]}], 
+         Alignment -> Right]}], WindowTitle -> 
+      "Upload image to StackExchange?"]; SEUploader`rasterizeSelection1[
+      Optional[
+       Pattern[SEUploader`maxWidth, 
+        Blank[]], 650]] := 
+    Module[{SEUploader`target, SEUploader`selection, SEUploader`image}, 
+      SEUploader`selection = NotebookRead[
+         SelectedNotebook[]]; If[
+        MemberQ[
+         Hold[{}, $Failed, 
+          NotebookRead[$Failed]], SEUploader`selection], $Failed, 
+        SEUploader`target = 
+         CreateDocument[{}, WindowSelected -> False, Visible -> False, 
+           WindowSize -> SEUploader`maxWidth]; 
+        NotebookWrite[SEUploader`target, SEUploader`selection]; 
+        SEUploader`image = Rasterize[SEUploader`target, "Image"]; 
+        NotebookClose[SEUploader`target]; SEUploader`image]]; 
+   SEUploader`rasterizeSelection2[] := If[
+      MemberQ[
+       Hold[{}, $Failed, 
+        NotebookRead[$Failed]], 
+       NotebookRead[
+        SelectedNotebook[]]], $Failed, 
+      Module[{SEUploader`tag}, FrontEndExecute[
+         FrontEndToken[
+          FrontEnd`SelectedNotebook[], "CopySpecial", "MGF"]]; 
+       Catch[ReplaceAll[
+           NotebookGet[
+            ClipboardNotebook[]], Pattern[SEUploader`r, 
+             Blank[RasterBox]] :> Block[{}, 
+             Condition[
+              Throw[
+               Image[
+                First[SEUploader`r], "Byte", ColorSpace -> "RGB"], 
+               SEUploader`tag], True]]]; $Failed, SEUploader`tag]]]; Null)]]]
+},
+WindowSize->All,
+WindowMargins->{{Automatic, 0}, {Automatic, 0}},
+WindowElements->{},
+WindowTitle->"SE Uploader",
+TaggingRules->{"ImageUploadHistory" -> {}},
+FrontEndVersion->"8.0 for Microsoft Windows (32-bit) (October 6, 2011)",
+StyleDefinitions->"Palette.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[583, 21, 12769, 293, 85, InheritFromParent]
+}
+]
+*)
+
+(* End of internal cache information *)
+
