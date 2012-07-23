@@ -51,8 +51,8 @@ Global`palette = PaletteNotebook[DynamicModule[{},
      version = lversion;
      
      (* Update URLs *)
-     versionURL = "E:\\work\\GitRepos\Mathematica.SE-utilities\\version";
-     paletteURL = "E:\\work\\GitRepos\Mathematica.SE-utilities\\SEUploaderLatest.nb";
+     versionURL = "https://raw.github.com/szhorvat/SEUploader/master/version";
+     paletteURL = "https://raw.github.com/szhorvat/SEUploader/master/SEUploaderLatest.nb";
      
      (* check the latest version on GitHub *)
      checkOnlineVersion[] := 
