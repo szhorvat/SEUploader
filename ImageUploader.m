@@ -50,11 +50,15 @@ Global`palette = PaletteNotebook[DynamicModule[{},
      (* the palette version number, stored as a string *)
      version = lversion;
      
+     (* Update URLs *)
+     versionURL = "E:\\work\\GitRepos\Mathematica.SE-utilities\\version";
+     paletteURL = "E:\\work\\GitRepos\Mathematica.SE-utilities\\SEUploaderLatest.nb";
+     
      (* check the latest version on GitHub *)
      checkOnlineVersion[] := 
       Module[{onlineVersion},
       	Quiet@Check[
-      		onlineVersion = Import["https://raw.github.com/szhorvat/SEUploader/master/version"],
+      		onlineVersion = Import[versionURL, "Text"],
       		Return[$Failed]
       	];
       	CurrentValue[$FrontEnd, {TaggingRules, "SEUploaderLastUpdateCheck"}] = AbsoluteTime[];
@@ -64,17 +68,23 @@ Global`palette = PaletteNotebook[DynamicModule[{},
      (* Check for updates on initialization if last check was > 3 days ago.
         The check will time out after 6 seconds. *) 
      If[AbsoluteTime[] > 3*3600*24 + CurrentValue[$FrontEnd, {TaggingRules, "SEUploaderLastUpdateCheck"}, 0],
- 		TimeConstrained[SEUploader`checkOnlineVersion[], 6]
+ 		TimeConstrained[checkOnlineVersion[], 6]
      ];
      
      onlineUpdate[] :=
-       Module[{newPalette, paletteFileName, paletteDirectory},
-       	newPalette = Import["https://raw.github.com/szhorvat/SEUploader/master/SEUploaderLatest.nb", "String"];
-       	If[newPalette === $Failed, Beep[]; Return[]];
+       Module[{paletteSource, paletteExpression, paletteFileName, paletteDirectory},
+       	paletteSource = Import[paletteURL, "String"];
+       	If[paletteSource === $Failed, Beep[]; Return[]];
+       	
+       	(* Validate notebook. If GitHub is down, we shouldn't replace a working palette
+       	   with the contents of an error page. *)
+       	Quiet@Check[paletteExpression = ImportString[paletteSource, {"Package", "HeldExpressions"}], Beep[]; Return[]];
+       	If[Extract[paletteExpression, {1,1,0}] =!= Notebook, Beep[]; Return[]];
+       	
        	paletteFileName = NotebookFileName[pnb];
        	paletteDirectory = NotebookDirectory[pnb];
        	NotebookClose[pnb];
-       	Export[paletteFileName, newPalette, "String"];
+       	Export[paletteFileName, paletteSource, "String"];
        	FrontEndTokenExecute["OpenFromPalettesMenu", paletteFileName];
        ];
       
@@ -164,6 +174,8 @@ Global`palette = PaletteNotebook[DynamicModule[{},
         result,
         Message[stackImage::err, error]; $Failed]
        ];
+       
+     (* PALETTE BUTTON ACTIONS AND HELPER FUNCTIONS *)
 
      (* Copy text to the clipboard.  Works on v7. *)
      copyToClipboard[text_] := 

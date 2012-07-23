@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       157,          7]
-NotebookDataLength[     13694,        332]
-NotebookOptionsPosition[     13358,        316]
-NotebookOutlinePosition[     13784,        334]
-CellTagsIndexPosition[     13741,        331]
+NotebookDataLength[     14205,        341]
+NotebookOptionsPosition[     13869,        325]
+NotebookOutlinePosition[     14295,        343]
+CellTagsIndexPosition[     14252,        340]
 WindowTitle->SE Uploader
 WindowFrame->Palette*)
 
@@ -88,11 +88,14 @@ StackExchange\\n(pixel-perfect rasterization)\"",
    "Column"],
   DynamicModuleValues:>{},
   Initialization:>(SEUploader`pnb = EvaluationNotebook[]; 
-   SEUploader`version = "104"; 
+   SEUploader`version = "105"; 
+   SEUploader`versionURL = 
+    "E:\\work\\GitRepos\\Mathematica.SE-utilities\\version"; 
+   SEUploader`paletteURL = 
+    "E:\\work\\GitRepos\\Mathematica.SE-utilities\\SEUploaderLatest.nb"; 
    SEUploader`checkOnlineVersion[] := Module[{SEUploader`onlineVersion}, Quiet[
         Check[
-        SEUploader`onlineVersion = 
-         Import["https://raw.github.com/szhorvat/SEUploader/master/version"], 
+        SEUploader`onlineVersion = Import[SEUploader`versionURL, "Text"], 
          Return[$Failed]]]; 
       CurrentValue[$FrontEnd, {TaggingRules, "SEUploaderLastUpdateCheck"}] = 
        AbsoluteTime[]; 
@@ -104,18 +107,25 @@ StackExchange\\n(pixel-perfect rasterization)\"",
      TimeConstrained[
       SEUploader`checkOnlineVersion[], 6]]; 
    SEUploader`onlineUpdate[] := 
-    Module[{SEUploader`newPalette, SEUploader`paletteFileName, 
-       SEUploader`paletteDirectory}, 
-      SEUploader`newPalette = 
-       Import["https://raw.github.com/szhorvat/SEUploader/master/\
-SEUploaderLatest.nb", "String"]; 
-      If[SEUploader`newPalette === $Failed, Beep[]; Return[]]; 
+    Module[{SEUploader`paletteSource, SEUploader`paletteExpression, 
+       SEUploader`paletteFileName, SEUploader`paletteDirectory}, 
+      SEUploader`paletteSource = Import[SEUploader`paletteURL, "String"]; 
+      If[SEUploader`paletteSource === $Failed, Beep[]; Return[]]; Quiet[
+        Check[
+        SEUploader`paletteExpression = 
+         ImportString[
+          SEUploader`paletteSource, {"Package", "HeldExpressions"}], Beep[]; 
+         Return[]]]; 
+      If[Extract[SEUploader`paletteExpression, {1, 1, 0}] =!= Notebook, 
+        Beep[]; Return[]]; 
       SEUploader`paletteFileName = NotebookFileName[SEUploader`pnb]; 
       SEUploader`paletteDirectory = NotebookDirectory[SEUploader`pnb]; 
       NotebookClose[SEUploader`pnb]; 
-      Export[SEUploader`paletteFileName, SEUploader`newPalette, "String"]; 
-      FrontEndTokenExecute[
-       "OpenFromPalettesMenu", SEUploader`paletteFileName]; Null]; 
+      Export[SEUploader`paletteFileName, SEUploader`paletteSource, "String"]; 
+      FrontEndExecute[
+        FrontEnd`ResetMenusPacket[{Automatic, Automatic}]]; 
+      FrontEndTokenExecute["OpenFromPalettesMenu", 
+        FileNameTake[SEUploader`paletteFileName]]; Null]; 
    SEUploader`updateButton[] := 
     Module[{SEUploader`res}, SEUploader`res = SEUploader`checkOnlineVersion[]; 
       CreateDialog[
@@ -208,8 +218,7 @@ MultipartRequestEntity", {SEUploader`part},
         Return[$Failed]]; SEUploader`response = Map[StringTrim, 
          StringSplit[SEUploader`response, "\n"]]; 
       SEUploader`error = SEUploader`getVal[SEUploader`response, "error"]; 
-      SEUploader`result = SEUploader`getVal[SEUploader`response, "result"]; 
-      If[
+      SEUploader`result = SEUploader`getVal[SEUploader`response, "result"]; If[
         StringMatchQ[SEUploader`result, "http*"], SEUploader`result, Message[
           MessageName[SEUploader`stackImage, "err"], 
           SEUploader`error]; $Failed]]; SEUploader`copyToClipboard[
@@ -333,7 +342,7 @@ CellTagsIndex->{}
 *)
 (*NotebookFileOutline
 Notebook[{
-Cell[583, 21, 12771, 293, 85, InheritFromParent]
+Cell[583, 21, 13282, 302, 85, InheritFromParent]
 }
 ]
 *)
