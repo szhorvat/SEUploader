@@ -44,7 +44,12 @@ Global`palette = PaletteNotebook[DynamicModule[{},
     (
      (* always refers to the palette notebook *)
      pnb = EvaluationNotebook[];
-          
+     
+     (* HELPER FUNCTIONS *)
+     
+     closeButton[] :=
+       DefaultButton["Close", DialogReturn[], ImageSize -> CurrentValue["DefaultButtonSize"], ImageMargins -> {{2,2}, {10,10}}];
+
      (* VERSION CHECK CODE *)
      
      (* the palette version number, stored as a string *)
@@ -119,7 +124,7 @@ Global`palette = PaletteNotebook[DynamicModule[{},
       	   		
       	   	  ChoiceButtons[{"Update to new version"}, {onlineUpdate[]; DialogReturn[]}],
       	   	  
-      	   	  CancelButton[ImageMargins -> {{2,2}, {10,10}}]
+      	   	  closeButton[]
       	   	],
       	   	ItemSize -> 40, 
       	   	Alignment -> Right]
@@ -194,20 +199,25 @@ Global`palette = PaletteNotebook[DynamicModule[{},
      ];
      
      historyButton[] :=         
-        MessageDialog[
+        CreateDialog[
           Column[{
           	Style["Click a thumbnail to copy its URL.", Bold],
-            Grid@Partition[PadRight[
+            Dynamic@Grid@Partition[PadRight[
           	  Tooltip[
           	  	Button[#1, copyToClipboard[#2]; DialogReturn[], Appearance -> "Palette"], 
           	  	#2, TooltipDelay -> Automatic] & @@@ 
           	  CurrentValue[pnb, {TaggingRules, "ImageUploadHistory"}, {}], 
-           	  9, ""], 3]
+           	  9, ""], 3],
+           	Item[Row[{
+           		Button["Clear all", CurrentValue[pnb, {TaggingRules, "ImageUploadHistory"}] = {}],
+           		Spacer[6], 
+           		closeButton[]}
+           		], Alignment -> Right, ItemSize -> 58]
           }], 
-          WindowTitle -> "History", WindowSize -> {450, All}];
+          WindowTitle -> "History"];
 
 	 uploadButton[] :=
-	   With[{img = rasterizeSelection1[]}, 
+	   With[{img = rasterizeSelection1[]},
         If[img === $Failed, Beep[], uploadWithPreview[img]]];
 
      uploadPPButton[] := 

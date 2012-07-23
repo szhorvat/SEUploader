@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       157,          7]
-NotebookDataLength[     14205,        341]
-NotebookOptionsPosition[     13869,        325]
-NotebookOutlinePosition[     14295,        343]
-CellTagsIndexPosition[     14252,        340]
+NotebookDataLength[     14634,        353]
+NotebookOptionsPosition[     14298,        337]
+NotebookOutlinePosition[     14724,        355]
+CellTagsIndexPosition[     14681,        352]
 WindowTitle->SE Uploader
 WindowFrame->Palette*)
 
@@ -88,11 +88,13 @@ StackExchange\\n(pixel-perfect rasterization)\"",
    "Column"],
   DynamicModuleValues:>{},
   Initialization:>(SEUploader`pnb = EvaluationNotebook[]; 
-   SEUploader`version = "105"; 
+   SEUploader`closeButton[] := DefaultButton["Close", 
+      DialogReturn[], ImageSize -> CurrentValue["DefaultButtonSize"], 
+      ImageMargins -> {{2, 2}, {10, 10}}]; SEUploader`version = "106"; 
    SEUploader`versionURL = 
-    "E:\\work\\GitRepos\\Mathematica.SE-utilities\\version"; 
+    "https://raw.github.com/szhorvat/SEUploader/master/version"; 
    SEUploader`paletteURL = 
-    "E:\\work\\GitRepos\\Mathematica.SE-utilities\\SEUploaderLatest.nb"; 
+    "https://raw.github.com/szhorvat/SEUploader/master/SEUploaderLatest.nb"; 
    SEUploader`checkOnlineVersion[] := Module[{SEUploader`onlineVersion}, Quiet[
         Check[
         SEUploader`onlineVersion = Import[SEUploader`versionURL, "Text"], 
@@ -156,8 +158,8 @@ StackExchange\\n(pixel-perfect rasterization)\"",
             
             ChoiceButtons[{"Update to new version"}, {
              SEUploader`onlineUpdate[]; DialogReturn[]}], 
-            CancelButton[ImageMargins -> {{2, 2}, {10, 10}}]], ItemSize -> 40,
-            Alignment -> Right]}], WindowTitle -> "Version information"]]; 
+            SEUploader`closeButton[]], ItemSize -> 40, Alignment -> Right]}], 
+        WindowTitle -> "Version information"]]; 
    MessageName[SEUploader`stackImage, "httperr"] = 
     "Server returned respose code: `1`"; 
    MessageName[SEUploader`stackImage, "err"] = "Server returner error: `1`"; 
@@ -230,19 +232,29 @@ MultipartRequestEntity", {SEUploader`part},
       SelectionMove[$CellContext`nb, All, Notebook]; 
       FrontEndTokenExecute[$CellContext`nb, "Copy"]; 
       NotebookClose[$CellContext`nb]; Null]; 
-   SEUploader`historyButton[] := MessageDialog[
+   SEUploader`historyButton[] := CreateDialog[
       Column[{
         Style["Click a thumbnail to copy its URL.", Bold], 
-        Grid[
-         Partition[
-          PadRight[
-           Apply[Tooltip[
-             
-             Button[#, SEUploader`copyToClipboard[#2]; DialogReturn[], 
-              Appearance -> "Palette"], #2, TooltipDelay -> Automatic]& , 
+        Dynamic[
+         Grid[
+          Partition[
+           PadRight[
+            Apply[Tooltip[
+              
+              Button[#, SEUploader`copyToClipboard[#2]; DialogReturn[], 
+               Appearance -> "Palette"], #2, TooltipDelay -> Automatic]& , 
+             CurrentValue[
+             SEUploader`pnb, {TaggingRules, "ImageUploadHistory"}, {}], {1}], 
+            9, ""], 3]]], 
+        Item[
+         Row[{
+           Button[
+           "Clear all", 
             CurrentValue[
-            SEUploader`pnb, {TaggingRules, "ImageUploadHistory"}, {}], {1}], 
-           9, ""], 3]]}], WindowTitle -> "History", WindowSize -> {450, All}]; 
+             SEUploader`pnb, {TaggingRules, "ImageUploadHistory"}] = {}], 
+           Spacer[6], 
+           SEUploader`closeButton[]}], Alignment -> Right, ItemSize -> 58]}], 
+      WindowTitle -> "History"]; 
    SEUploader`uploadButton[] := 
     With[{SEUploader`img = SEUploader`rasterizeSelection1[]}, 
       If[SEUploader`img === $Failed, 
@@ -342,7 +354,7 @@ CellTagsIndex->{}
 *)
 (*NotebookFileOutline
 Notebook[{
-Cell[583, 21, 13282, 302, 85, InheritFromParent]
+Cell[583, 21, 13711, 314, 85, InheritFromParent]
 }
 ]
 *)
