@@ -209,8 +209,8 @@ Global`palette = PaletteNotebook[DynamicModule[{},
           	  CurrentValue[pnb, {TaggingRules, "ImageUploadHistory"}, {}], 
            	  9, ""], 3],
            	Item[Row[{
-           		Button["Clear all", CurrentValue[pnb, {TaggingRules, "ImageUploadHistory"}] = {}],
-           		Spacer[6], 
+           		Button["Clear all", CurrentValue[pnb, {TaggingRules, "ImageUploadHistory"}] = {}, ImageSize -> CurrentValue["DefaultButtonSize"]],
+           		Spacer[10], 
            		closeButton[]}
            		], Alignment -> Right, ItemSize -> 58]
           }], 

@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       157,          7]
-NotebookDataLength[     13533,        318]
-NotebookOptionsPosition[     13197,        302]
-NotebookOutlinePosition[     13623,        320]
-CellTagsIndexPosition[     13580,        317]
+NotebookDataLength[     13595,        319]
+NotebookOptionsPosition[     13259,        303]
+NotebookOutlinePosition[     13685,        321]
+CellTagsIndexPosition[     13642,        318]
 WindowTitle->SE Uploader
 WindowFrame->Palette*)
 
@@ -216,8 +216,9 @@ MultipartRequestEntity", {SEUploader`part},
            Button[
            "Clear all", 
             CurrentValue[
-             SEUploader`pnb, {TaggingRules, "ImageUploadHistory"}] = {}], 
-           Spacer[6], 
+             SEUploader`pnb, {TaggingRules, "ImageUploadHistory"}] = {}, 
+            ImageSize -> CurrentValue["DefaultButtonSize"]], 
+           Spacer[10], 
            SEUploader`closeButton[]}], Alignment -> Right, ItemSize -> 58]}], 
       WindowTitle -> "History"]; 
    SEUploader`uploadButton[] := 
@@ -319,7 +320,7 @@ CellTagsIndex->{}
 *)
 (*NotebookFileOutline
 Notebook[{
-Cell[583, 21, 12610, 279, 85, InheritFromParent]
+Cell[583, 21, 12672, 280, 85, InheritFromParent]
 }
 ]
 *)
