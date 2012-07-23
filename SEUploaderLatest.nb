@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       157,          7]
-NotebookDataLength[     14634,        353]
-NotebookOptionsPosition[     14298,        337]
-NotebookOutlinePosition[     14724,        355]
-CellTagsIndexPosition[     14681,        352]
+NotebookDataLength[     13533,        318]
+NotebookOptionsPosition[     13197,        302]
+NotebookOutlinePosition[     13623,        320]
+CellTagsIndexPosition[     13580,        317]
 WindowTitle->SE Uploader
 WindowFrame->Palette*)
 
@@ -21,76 +21,41 @@ WindowFrame->Palette*)
 Notebook[{
 Cell[BoxData[
  DynamicModuleBox[{}, 
-  TagBox[GridBox[{
-     {
-      TagBox[
-       TooltipBox[
-        ButtonBox["\<\"Upload to SE\"\>",
-         Appearance->"Palette",
-         ButtonFunction:>SEUploader`uploadButton[],
-         Evaluator->Automatic,
-         Method->"Preemptive"],
-        "\"Upload the selected expression as an image to StackExchange\"",
-        TooltipDelay->Automatic,
-        TooltipStyle->"TextStyling"],
-       Annotation[#, 
-        "Upload the selected expression as an image to StackExchange", 
-        "Tooltip"]& ]},
-     {
-      TagBox[
-       TooltipBox[
-        ButtonBox["\<\"Upload to SE (pp)\"\>",
-         Appearance->"Palette",
-         ButtonFunction:>SEUploader`uploadPPButton[],
-         Evaluator->Automatic,
-         Method->"Preemptive"],
-        "\"Upload the selected experssion as an image to \
-StackExchange\\n(pixel-perfect rasterization)\"",
-        TooltipDelay->Automatic,
-        TooltipStyle->"TextStyling"],
-       Annotation[#, 
+  DynamicBox[ToBoxes[
+    Column[{
+      Tooltip[
+       Button["Upload to SE", 
+        SEUploader`uploadButton[], Appearance -> "Palette"], 
+       "Upload the selected expression as an image to StackExchange", 
+       TooltipDelay -> Automatic], 
+      If[$OperatingSystem === "Windows", 
+       Tooltip[
+        Button["Upload to SE (pp)", 
+         SEUploader`uploadPPButton[], Appearance -> "Palette"], 
         "Upload the selected experssion as an image to StackExchange\n\
-(pixel-perfect rasterization)", "Tooltip"]& ]},
-     {
-      TagBox[
-       TooltipBox[
-        ButtonBox["\<\"History...\"\>",
-         Appearance->"Palette",
-         ButtonFunction:>SEUploader`historyButton[],
-         Evaluator->Automatic,
-         Method->"Preemptive"],
-        "\"See previously uploaded images and copy their URLs\"",
-        TooltipDelay->Automatic,
-        TooltipStyle->"TextStyling"],
-       Annotation[#, "See previously uploaded images and copy their URLs", 
-        "Tooltip"]& ]},
-     {
-      TagBox[
-       TooltipBox[
-        ButtonBox["\<\"Update...\"\>",
-         Appearance->"Palette",
-         Background->Dynamic[
-           If[
-           CurrentValue[$FrontEnd, {TaggingRules, "SEUploaderVersion"}, 
-              SEUploader`version] =!= SEUploader`version, LightMagenta, 
-            Automatic]],
-         ButtonFunction:>SEUploader`updateButton[],
-         Evaluator->Automatic,
-         Method->"Preemptive"],
-        "\"Check for newer versions of the uploader palette\"",
-        TooltipDelay->Automatic,
-        TooltipStyle->"TextStyling"],
-       Annotation[#, "Check for newer versions of the uploader palette", 
-        "Tooltip"]& ]}
-    },
-    GridBoxAlignment->{"Columns" -> {{Left}}},
-    GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
-   "Column"],
+(pixel-perfect rasterization)", TooltipDelay -> Automatic], 
+       Unevaluated[
+        Sequence[]]], 
+      Tooltip[
+       Button["History...", 
+        SEUploader`historyButton[], Appearance -> "Palette"], 
+       "See previously uploaded images and copy their URLs", TooltipDelay -> 
+       Automatic], 
+      Tooltip[
+       Button["Update...", 
+        SEUploader`updateButton[], Appearance -> "Palette", Background -> 
+        Dynamic[
+          If[
+          CurrentValue[$FrontEnd, {TaggingRules, "SEUploaderVersion"}, 
+             SEUploader`version] =!= SEUploader`version, LightMagenta, 
+           Automatic]]], "Check for newer versions of the uploader palette", 
+       TooltipDelay -> Automatic]}], StandardForm],
+   ImageSizeCache->{91., {39., 44.}}],
   DynamicModuleValues:>{},
   Initialization:>(SEUploader`pnb = EvaluationNotebook[]; 
    SEUploader`closeButton[] := DefaultButton["Close", 
       DialogReturn[], ImageSize -> CurrentValue["DefaultButtonSize"], 
-      ImageMargins -> {{2, 2}, {10, 10}}]; SEUploader`version = "106"; 
+      ImageMargins -> {{2, 2}, {10, 10}}]; SEUploader`version = "107"; 
    SEUploader`versionURL = 
     "https://raw.github.com/szhorvat/SEUploader/master/version"; 
    SEUploader`paletteURL = 
@@ -354,7 +319,7 @@ CellTagsIndex->{}
 *)
 (*NotebookFileOutline
 Notebook[{
-Cell[583, 21, 13711, 314, 85, InheritFromParent]
+Cell[583, 21, 12610, 279, 85, InheritFromParent]
 }
 ]
 *)

@@ -6,7 +6,7 @@ With[{lversion = Import["version", "Text"]},
 
 Global`palette = PaletteNotebook[DynamicModule[{},
    
-   Column[{
+   Dynamic@Column[{
    	 Tooltip[
       Button["Upload to SE",
        uploadButton[],
