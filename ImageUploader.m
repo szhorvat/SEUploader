@@ -85,7 +85,13 @@ Global`palette = PaletteNotebook[DynamicModule[{},
        	paletteDirectory = NotebookDirectory[pnb];
        	NotebookClose[pnb];
        	Export[paletteFileName, paletteSource, "String"];
-       	FrontEndTokenExecute["OpenFromPalettesMenu", paletteFileName];
+       	FrontEndExecute[FrontEnd`ResetMenusPacket[{Automatic, Automatic}]];
+       	
+       	(* Note: FileNameTake is necessary to preserve the "PalettesMenuSettings",
+       	   which are tied to the file name as a string.  If using the full path,
+       	   the Front End will think we're opening a different palette and
+       	   will not apply the "PalettesMenuSettings" *)
+       	FrontEndTokenExecute["OpenFromPalettesMenu", FileNameTake[paletteFileName]];
        ];
       
      updateButton[] :=
