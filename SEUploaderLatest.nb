@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       157,          7]
-NotebookDataLength[     13595,        319]
-NotebookOptionsPosition[     13259,        303]
-NotebookOutlinePosition[     13685,        321]
-CellTagsIndexPosition[     13642,        318]
+NotebookDataLength[     13596,        320]
+NotebookOptionsPosition[     13260,        304]
+NotebookOutlinePosition[     13686,        322]
+CellTagsIndexPosition[     13643,        319]
 WindowTitle->SE Uploader
 WindowFrame->Palette*)
 
@@ -111,7 +111,7 @@ Cell[BoxData[
              Hyperlink[
              "History of changes", 
               "https://github.com/szhorvat/SEUploader/commits/master"]}]], 
-          Item[
+          Pane[
            If[
             And[
             SEUploader`res =!= $Failed, 
@@ -123,8 +123,8 @@ Cell[BoxData[
             
             ChoiceButtons[{"Update to new version"}, {
              SEUploader`onlineUpdate[]; DialogReturn[]}], 
-            SEUploader`closeButton[]], ItemSize -> 40, Alignment -> Right]}], 
-        WindowTitle -> "Version information"]]; 
+            SEUploader`closeButton[]], ImageSize -> 340, Alignment -> 
+           Right]}], WindowTitle -> "Version information"]]; 
    MessageName[SEUploader`stackImage, "httperr"] = 
     "Server returned respose code: `1`"; 
    MessageName[SEUploader`stackImage, "err"] = "Server returner error: `1`"; 
@@ -191,12 +191,12 @@ MultipartRequestEntity", {SEUploader`part},
           SEUploader`error]; $Failed]]; SEUploader`copyToClipboard[
       Pattern[SEUploader`text, 
        Blank[]]] := 
-    Module[{$CellContext`nb}, $CellContext`nb = 
-       NotebookCreate[Visible -> False]; NotebookWrite[$CellContext`nb, 
+    Module[{SEUploader`nb}, SEUploader`nb = NotebookCreate[Visible -> False]; 
+      NotebookWrite[SEUploader`nb, 
         Cell[SEUploader`text, "Text"]]; 
-      SelectionMove[$CellContext`nb, All, Notebook]; 
-      FrontEndTokenExecute[$CellContext`nb, "Copy"]; 
-      NotebookClose[$CellContext`nb]; Null]; 
+      SelectionMove[SEUploader`nb, All, Notebook]; 
+      FrontEndTokenExecute[SEUploader`nb, "Copy"]; 
+      NotebookClose[SEUploader`nb]; Null]; 
    SEUploader`historyButton[] := CreateDialog[
       Column[{
         Style["Click a thumbnail to copy its URL.", Bold], 
@@ -213,14 +213,15 @@ MultipartRequestEntity", {SEUploader`part},
             9, ""], 3]]], 
         Item[
          Row[{
+           Spacer[200], 
            Button[
            "Clear all", 
             CurrentValue[
              SEUploader`pnb, {TaggingRules, "ImageUploadHistory"}] = {}, 
             ImageSize -> CurrentValue["DefaultButtonSize"]], 
            Spacer[10], 
-           SEUploader`closeButton[]}], Alignment -> Right, ItemSize -> 58]}], 
-      WindowTitle -> "History"]; 
+           SEUploader`closeButton[]}], Alignment -> Right]}], WindowTitle -> 
+      "History"]; 
    SEUploader`uploadButton[] := 
     With[{SEUploader`img = SEUploader`rasterizeSelection1[]}, 
       If[SEUploader`img === $Failed, 
@@ -320,7 +321,7 @@ CellTagsIndex->{}
 *)
 (*NotebookFileOutline
 Notebook[{
-Cell[583, 21, 12672, 280, 85, InheritFromParent]
+Cell[583, 21, 12673, 281, 85, InheritFromParent]
 }
 ]
 *)

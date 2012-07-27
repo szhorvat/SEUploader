@@ -117,7 +117,7 @@ Global`palette = PaletteNotebook[DynamicModule[{},
       	    }]
       	   ],
       	 
-      	   Item[
+      	   Pane[
       	   	If[res =!= $Failed 
       	   		&& CurrentValue[$FrontEnd, {TaggingRules, "SEUploaderVersion"}, version] =!= version
       	   		&& FileNameSplit@NotebookDirectory[pnb] === Join[FileNameSplit[$UserBaseDirectory], {"SystemFiles", "FrontEnd", "Palettes"}],
@@ -126,7 +126,7 @@ Global`palette = PaletteNotebook[DynamicModule[{},
       	   	  
       	   	  closeButton[]
       	   	],
-      	   	ItemSize -> 40, 
+      	   	ImageSize -> 340, 
       	   	Alignment -> Right]
       	 }],
       	 
@@ -209,10 +209,11 @@ Global`palette = PaletteNotebook[DynamicModule[{},
           	  CurrentValue[pnb, {TaggingRules, "ImageUploadHistory"}, {}], 
            	  9, ""], 3],
            	Item[Row[{
+           		Spacer[200],
            		Button["Clear all", CurrentValue[pnb, {TaggingRules, "ImageUploadHistory"}] = {}, ImageSize -> CurrentValue["DefaultButtonSize"]],
            		Spacer[10], 
            		closeButton[]}
-           		], Alignment -> Right, ItemSize -> 58]
+           		], Alignment -> Right]
           }], 
           WindowTitle -> "History"];
 
