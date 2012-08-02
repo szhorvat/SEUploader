@@ -4,14 +4,17 @@ Cell[CellGroupData[{
 Cell["StackExchange image uploader palette", "Section"],
 
 Cell[TextData[{
- "This notebook is used to build the image uploader palette from the source \
-package.  Please see the ",
- ButtonBox["homepage",
+ StyleBox["This notebook is used to build the distributable palette notebook \
+from the source package.  Please see the ",
+  FontWeight->"Bold"],
+ StyleBox[ButtonBox["homepage",
   BaseStyle->"Hyperlink",
   ButtonData->{
     URL["http://meta.mathematica.stackexchange.com/a/32/12"], None},
   ButtonNote->"http://meta.mathematica.stackexchange.com/a/32/12"],
- " for end user installation instructions."
+  FontWeight->"Bold"],
+ StyleBox[" for end user installation instructions!",
+  FontWeight->"Bold"]
 }], "Text"],
 
 Cell[TextData[{

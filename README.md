@@ -1,6 +1,8 @@
 #Utility palettes for Mathematica.SE
 
-The documentation is in the notebooks.  Please see there for installation instructions.
+**Please see [here](http://meta.mathematica.stackexchange.com/a/32/12) for installation instructions!**
+
+Building instructions are in the notebooks.
 
 The code is split off to .m files for easy editing through the GitHub web interface.
 
