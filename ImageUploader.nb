@@ -29,7 +29,8 @@ Cell[TextData[{
  " (this file), and evaluate the ",
  StyleBox["complete",
   FontSlant->"Italic"],
- " notebook.  This will save the palette in the same location as the package."
+ " notebook.  This will save the palette in the same location as the \
+package."
 }], "Text"],
 
 Cell[TextData[{
@@ -369,6 +370,7 @@ Cell[TextData[{
   BaseStyle->"Hyperlink",
   ButtonData->{
     URL["https://github.com/szhorvat/Mathematica.SE-utilities/issues"], None},
+  
   ButtonNote->"https://github.com/szhorvat/Mathematica.SE-utilities/issues"],
  " as well for reporting bugs."
 }], "Text"],
@@ -378,7 +380,8 @@ Cell[BoxData[{
   RowBox[{"SetDirectory", "[", 
    RowBox[{"NotebookDirectory", "[", "]"}], "]"}], 
   ";"}], "\[IndentingNewLine]", 
- RowBox[{"Get", "[", "\"\<ImageUploader.m\>\"", "]"}], "\[IndentingNewLine]", 
+ RowBox[{"Get", "[", "\"\<ImageUploader.m\>\"", 
+  "]"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{"nb", "=", 
    RowBox[{"CreatePalette", "[", "palette", "]"}]}], 
@@ -408,10 +411,10 @@ Cell[BoxData[{
 }, Open  ]]
 },
 WindowSize->{710, 577},
-WindowMargins->{{190, Automatic}, {Automatic, 41}},
+WindowMargins->{{189, Automatic}, {Automatic, 24}},
 PrivateNotebookOptions->{"FileOutlineCache"->False},
 TrackCellChangeTimes->False,
-FrontEndVersion->"8.0 for Microsoft Windows (32-bit) (October 6, 2011)",
+FrontEndVersion->"9.0 for Linux x86 (64-bit) (October 10, 2012)",
 StyleDefinitions->"Default.nb"
 ]
 
