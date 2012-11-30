@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       157,          7]
-NotebookDataLength[     26219,        538]
-NotebookOptionsPosition[     25889,        522]
-NotebookOutlinePosition[     26309,        540]
-CellTagsIndexPosition[     26266,        537]
+NotebookDataLength[     26208,        538]
+NotebookOptionsPosition[     25876,        522]
+NotebookOutlinePosition[     26298,        540]
+CellTagsIndexPosition[     26255,        537]
 WindowTitle->SE Uploader
 WindowFrame->Palette*)
 
@@ -251,7 +251,7 @@ NmQFGBExMpJIIgkvQx2Qldub22JDfuERESMjiSSS8PJ/YOJzPg==
   Initialization:>(SEUploader`pnb = EvaluationNotebook[]; 
    SEUploader`closeButton[] := DefaultButton["Close", 
       DialogReturn[], ImageSize -> CurrentValue["DefaultButtonSize"], 
-      ImageMargins -> {{2, 2}, {10, 10}}]; SEUploader`version = "107"; 
+      ImageMargins -> {{2, 2}, {10, 10}}]; SEUploader`version = "108"; 
    SEUploader`versionURL = 
     "https://raw.github.com/szhorvat/SEUploader/master/version"; 
    SEUploader`paletteURL = 
@@ -387,12 +387,12 @@ MultipartRequestEntity", {SEUploader`part},
           SEUploader`error]; $Failed]]; SEUploader`copyToClipboard[
       Pattern[SEUploader`text, 
        Blank[]]] := 
-    Module[{$CellContext`nb}, $CellContext`nb = 
-       NotebookCreate[Visible -> False]; NotebookWrite[$CellContext`nb, 
+    Module[{SEUploader`nb}, SEUploader`nb = NotebookCreate[Visible -> False]; 
+      NotebookWrite[SEUploader`nb, 
         Cell[SEUploader`text, "Text"]]; 
-      SelectionMove[$CellContext`nb, All, Notebook]; 
-      FrontEndTokenExecute[$CellContext`nb, "Copy"]; 
-      NotebookClose[$CellContext`nb]; Null]; 
+      SelectionMove[SEUploader`nb, All, Notebook]; 
+      FrontEndTokenExecute[SEUploader`nb, "Copy"]; 
+      NotebookClose[SEUploader`nb]; Null]; 
    SEUploader`historyButton[] := CreateDialog[
       Column[{
         Style["Click a thumbnail to copy its URL.", Bold], 
@@ -521,7 +521,7 @@ answer."]},
                SEUploader`tag], True]]]; $Failed, SEUploader`tag]]]; Null)]]]
 },
 WindowSize->All,
-WindowMargins->{{Automatic, 0}, {Automatic, 24}},
+WindowMargins->{{Automatic, 231}, {Automatic, 56}},
 WindowElements->{},
 WindowTitle->"SE Uploader",
 TaggingRules->{"ImageUploadHistory" -> {}},
@@ -539,10 +539,9 @@ CellTagsIndex->{}
 *)
 (*NotebookFileOutline
 Notebook[{
-Cell[583, 21, 25302, 499, 93, InheritFromParent]
+Cell[583, 21, 25289, 499, 93, InheritFromParent]
 }
 ]
 *)
 
 (* End of internal cache information *)
-

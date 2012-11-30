@@ -3,19 +3,19 @@
 Begin["SEUploader`"];
 
 With[{
-	lversion = Import["version", "Text"], 
-	logo = Import["http://cdn.sstatic.net/mathematica/img/logo.png"]
+    lversion = Import["version", "Text"],
+    logo = Import["http://cdn.sstatic.net/mathematica/img/logo.png"]
 },
 
 Global`palette = PaletteNotebook[DynamicModule[{},
-	Dynamic@Row[{
-		Hyperlink[Rotate[logo,Pi/2],"http://mathematica.stackexchange.com/"],
-    	Column[{
-   	 		Tooltip[
-   	 			Button["Upload to SE", uploadButton[], Appearance -> "Palette"],
-       			"Upload the selected expression as an image to StackExchange", 
-       			TooltipDelay -> Automatic
-       		],
+    Dynamic@Row[{
+     Hyperlink[Rotate[logo,Pi/2],"http://mathematica.stackexchange.com/"],
+       Column[{
+        Tooltip[
+            Button["Upload to SE", uploadButton[], Appearance -> "Palette"],
+            "Upload the selected expression as an image to StackExchange", 
+            TooltipDelay -> Automatic
+        ],
 
      If[$OperatingSystem === "Windows",
       
@@ -47,12 +47,12 @@ Global`palette = PaletteNotebook[DynamicModule[{},
     (
      (* always refers to the palette notebook *)
      pnb = EvaluationNotebook[];
-     
+    
      (* HELPER FUNCTIONS *)
-     
+    
      closeButton[] :=
        DefaultButton["Close", DialogReturn[], ImageSize -> CurrentValue["DefaultButtonSize"], ImageMargins -> {{2,2}, {10,10}}];
-
+    
      (* VERSION CHECK CODE *)
      
      (* the palette version number, stored as a string *)
@@ -230,8 +230,7 @@ Global`palette = PaletteNotebook[DynamicModule[{},
 
 
      (* button from the upload dialog *)
-     uploadButtonAction[img_] := uploadButtonAction[
-     	img, "![Mathematica graphics](", ")"];
+     uploadButtonAction[img_] := uploadButtonAction[img, "![Mathematica graphics](", ")"];
      uploadButtonAction[img_, wrapStart_String, wrapEnd_String]:=
         Module[
           {url, markdown},
@@ -263,26 +262,26 @@ Global`palette = PaletteNotebook[DynamicModule[{},
           Scrollbars -> Automatic, AppearanceElements -> {}, 
           ImageMargins -> 0
          ],          
-		(*
-		Two buttons, one which copies an url for the site Q&Q and one for the
-		chat. The Chat and Site button only differ in the wrapper of the url. 
-		For an answer/question (Site) you usually want it in the style 
-		![Mathematica graphics](http://i.stack.imgur.com/iYQnh.png) while
-		the Chat needs the pure url.
-        *)
-		 Row[{
-			CancelButton[],
-            Tooltip[
-			  Button["Upload for Chat", uploadButtonAction[img, "",""]; DialogReturn[], 
-                  Method->"Queued", ImageSize -> CurrentValue["DefaultButtonSize"]],
-               "Marks the uploaded image for direct usage in the chat."
-             ],
-             Tooltip[
-  			DefaultButton["Upload for Site", uploadButtonAction[img]; DialogReturn[],
-                  Method->"Queued", ImageSize -> CurrentValue["DefaultButtonSize"]],
-               "Marks the uploaded image for direct usage in a question or answer."                 
-             ]
-		}, Spacer[10]]
+          (*
+          Two buttons, one which copies an url for the site Q&Q and one for the
+          chat. The Chat and Site button only differ in the wrapper of the url.
+          For an answer/question (Site) you usually want it in the style
+          ![Mathematica graphics](http://i.stack.imgur.com/iYQnh.png) while
+          the Chat needs the pure url.
+         *)
+         Row[{
+           CancelButton[],
+           Tooltip[
+             Button["Upload for Chat", uploadButtonAction[img, "",""]; DialogReturn[], 
+               Method->"Queued", ImageSize -> CurrentValue["DefaultButtonSize"]],
+             "Marks the uploaded image for direct usage in the chat."
+           ],
+           Tooltip[
+             DefaultButton["Upload for Site", uploadButtonAction[img]; DialogReturn[],
+               Method->"Queued", ImageSize -> CurrentValue["DefaultButtonSize"]],
+             "Marks the uploaded image for direct usage in a question or answer."                 
+           ]
+         }, Spacer[10]]
        }],
        WindowTitle -> "Upload image to StackExchange?"
        ];
