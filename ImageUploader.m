@@ -5,6 +5,9 @@ Begin["SEUploader`"];
 With[{lversion = Import["version", "Text"]},
 
 Global`palette = PaletteNotebook[DynamicModule[{},
+
+   Block[{$ContextPath}, Needs["JLink`"]];
+   JLink`InstallJava[];
    
    Dynamic@Column[{
    	 Tooltip[
