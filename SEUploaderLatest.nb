@@ -43,7 +43,7 @@ Cell[BoxData[
    SEUploader`pnb = EvaluationNotebook[]; 
    SEUploader`closeButton[] := DefaultButton["Close", 
       DialogReturn[], ImageSize -> CurrentValue["DefaultButtonSize"], 
-      ImageMargins -> {{2, 2}, {10, 10}}]; SEUploader`version = "108"; 
+      ImageMargins -> {{2, 2}, {10, 10}}]; SEUploader`version = "109"; 
    SEUploader`versionURL = 
     "https://raw.github.com/szhorvat/SEUploader/master/version"; 
    SEUploader`paletteURL = 
@@ -298,4 +298,3 @@ TaggingRules->{"ImageUploadHistory" -> {}},
 StyleDefinitions->"Palette.nb"
 ]
 (* End of Notebook Content *)
-
