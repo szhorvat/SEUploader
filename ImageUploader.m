@@ -2,24 +2,28 @@
 
 Begin["SEUploader`"];
 
-With[{lversion = Import["version", "Text"]},
+With[{
+    lversion = Import["version", "Text"],
+    logo = Import["http://cdn.sstatic.net/mathematica/img/logo.png"]
+},
 
 Global`palette = PaletteNotebook[DynamicModule[{},
-   
-   Dynamic@Column[{
-   	 Tooltip[
-      Button["Upload to SE",
-       uploadButton[],
-       Appearance -> "Palette"],
-       "Upload the selected expression as an image to StackExchange", TooltipDelay -> Automatic],
-     
+    Dynamic@Row[{
+     Hyperlink[Rotate[logo,Pi/2],"http://mathematica.stackexchange.com/"],
+       Column[{
+        Tooltip[
+            Button["Upload to SE", uploadButton[], Appearance -> "Palette"],
+            "Upload the selected expression as an image to StackExchange", 
+            TooltipDelay -> Automatic
+        ],
+
      If[$OperatingSystem === "Windows",
       
       Tooltip[
        Button["Upload to SE (pp)",
         uploadPPButton[],
         Appearance -> "Palette"],
-      "Upload the selected experssion as an image to StackExchange\n(pixel-perfect rasterization)", TooltipDelay -> Automatic],
+      "Upload the selected expression as an image to StackExchange\n(pixel-perfect rasterization)", TooltipDelay -> Automatic],
       
       Unevaluated@Sequence[]
       ],
@@ -36,9 +40,8 @@ Global`palette = PaletteNotebook[DynamicModule[{},
       			                      Automatic]
       	],
       	"Check for newer versions of the uploader palette", TooltipDelay -> Automatic] 
- 
-     }],
-   
+     }]
+}],
    (* init start *)
    Initialization :>
     (
@@ -47,12 +50,12 @@ Global`palette = PaletteNotebook[DynamicModule[{},
 
      (* always refers to the palette notebook *)
      pnb = EvaluationNotebook[];
-     
+    
      (* HELPER FUNCTIONS *)
-     
+    
      closeButton[] :=
        DefaultButton["Close", DialogReturn[], ImageSize -> CurrentValue["DefaultButtonSize"], ImageMargins -> {{2,2}, {10,10}}];
-
+    
      (* VERSION CHECK CODE *)
      
      (* the palette version number, stored as a string *)
@@ -230,19 +233,21 @@ Global`palette = PaletteNotebook[DynamicModule[{},
 
 
      (* button from the upload dialog *)
-     uploadButtonAction[img_] :=
+     uploadButtonAction[img_] := uploadButtonAction[img, "![Mathematica graphics](", ")"];
+     uploadButtonAction[img_, wrapStart_String, wrapEnd_String]:=
         Module[
           {url, markdown},
           Check[
            url = stackImage[img],
            Return[]
           ];
-          markdown = "![Mathematica graphics](" <> url <> ")";
+          markdown = wrapStart <> url <> wrapEnd;
           copyToClipboard[markdown];
           PrependTo[CurrentValue[pnb, {TaggingRules, "ImageUploadHistory"}], 
              {Thumbnail@Image[img], url}];
           If[Length[CurrentValue[pnb, {TaggingRules, "ImageUploadHistory"}]] > 9, 
-             CurrentValue[pnb, {TaggingRules, "ImageUploadHistory"}] = Most@CurrentValue[pnb, {TaggingRules, "ImageUploadHistory"}]];
+             CurrentValue[pnb, {TaggingRules, "ImageUploadHistory"}] = 
+             	Most@CurrentValue[pnb, {TaggingRules, "ImageUploadHistory"}]];
         ];
      
      (* returns available vertical screen space, 
@@ -253,15 +258,29 @@ Global`palette = PaletteNotebook[DynamicModule[{},
      uploadWithPreview[img_Image] :=
       CreateDialog[
        Column[{
-         Style["Upload image to StackExchange network?", Bold],
+         Style["Upload image to StackExchange network?\nThe URL/MarkDown will be copied to the clipboard.", Bold],
          Pane[
           Image[img, Magnification -> 1], {Automatic, 
            Min[screenHeight[] - 140, 1 + ImageDimensions[img][[2]]]},
           Scrollbars -> Automatic, AppearanceElements -> {}, 
           ImageMargins -> 0
-          ],
-         Item[ChoiceButtons[{"Upload and copy MarkDown"}, {uploadButtonAction[img]; DialogReturn[]}], Alignment -> Right]
-         }],
+         ],          
+          (*
+          Two buttons, one which copies an url for the site Q&A and one for the
+          chat. The Chat and Site button only differ in the wrapper of the url.
+          For an answer/question (Site) you usually want it in the style
+          ![Mathematica graphics](http://i.stack.imgur.com/iYQnh.png) while
+          the Chat needs the pure url.
+         *)
+         Item[
+           ChoiceButtons[{"Upload for site", "Upload for chat", "Close"},
+             {uploadButtonAction[img]; DialogReturn[],
+              uploadButtonAction[img, "",""]; DialogReturn[], 
+              DialogReturn[]
+             }],
+           Alignment -> Right
+         ]
+       }],
        WindowTitle -> "Upload image to StackExchange?"
        ];
      
