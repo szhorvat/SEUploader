@@ -3,20 +3,6 @@
 (*** Wolfram Notebook File ***)
 (* http://www.wolfram.com/nb *)
 
-(* CreatedBy='Mathematica 9.0' *)
-
-(*CacheID: 234*)
-(* Internal cache information:
-NotebookFileLineBreakTest
-NotebookFileLineBreakTest
-NotebookDataPosition[       157,          7]
-NotebookDataLength[     13620,        321]
-NotebookOptionsPosition[     13270,        304]
-NotebookOutlinePosition[     13710,        323]
-CellTagsIndexPosition[     13667,        320]
-WindowTitle->SE Uploader
-WindowFrame->Palette*)
-
 (* Beginning of Notebook Content *)
 Notebook[{
 Cell[BoxData[
@@ -50,9 +36,11 @@ Cell[BoxData[
              SEUploader`version] =!= SEUploader`version, LightMagenta, 
            Automatic]]], "Check for newer versions of the uploader palette", 
        TooltipDelay -> Automatic]}], StandardForm],
-   ImageSizeCache->{85., {38.34375, 43.65625}}],
+   ImageSizeCache->{85., {36.84375, 42.15625}}],
   DynamicModuleValues:>{},
-  Initialization:>(SEUploader`pnb = EvaluationNotebook[]; 
+  Initialization:>(Block[{$ContextPath}, 
+     Needs["JLink`"]]; JLink`InstallJava[]; 
+   SEUploader`pnb = EvaluationNotebook[]; 
    SEUploader`closeButton[] := DefaultButton["Close", 
       DialogReturn[], ImageSize -> CurrentValue["DefaultButtonSize"], 
       ImageMargins -> {{2, 2}, {10, 10}}]; SEUploader`version = "108"; 
@@ -307,25 +295,7 @@ WindowMargins->{{Automatic, 0}, {Automatic, 0}},
 WindowElements->{},
 WindowTitle->"SE Uploader",
 TaggingRules->{"ImageUploadHistory" -> {}},
-FrontEndVersion->"9.0 for Mac OS X x86 (32-bit, 64-bit Kernel) (November 20, \
-2012)",
 StyleDefinitions->"Palette.nb"
 ]
 (* End of Notebook Content *)
-
-(* Internal cache information *)
-(*CellTagsOutline
-CellTagsIndex->{}
-*)
-(*CellTagsIndex
-CellTagsIndex->{}
-*)
-(*NotebookFileOutline
-Notebook[{
-Cell[583, 21, 12683, 281, 84, InheritFromParent]
-}
-]
-*)
-
-(* End of internal cache information *)
 
