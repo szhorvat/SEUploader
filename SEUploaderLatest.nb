@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       157,          7]
-NotebookDataLength[     26208,        538]
-NotebookOptionsPosition[     25876,        522]
-NotebookOutlinePosition[     26298,        540]
-CellTagsIndexPosition[     26255,        537]
+NotebookDataLength[     25909,        530]
+NotebookOptionsPosition[     25559,        513]
+NotebookOutlinePosition[     25999,        532]
+CellTagsIndexPosition[     25956,        529]
 WindowTitle->SE Uploader
 WindowFrame->Palette*)
 
@@ -228,7 +228,7 @@ NmQFGBExMpJIIgkvQx2Qldub22JDfuERESMjiSSS8PJ/YOJzPg==
          Tooltip[
           Button["Upload to SE (pp)", 
            SEUploader`uploadPPButton[], Appearance -> "Palette"], 
-          "Upload the selected experssion as an image to StackExchange\n\
+          "Upload the selected expression as an image to StackExchange\n\
 (pixel-perfect rasterization)", TooltipDelay -> Automatic], 
          Unevaluated[
           Sequence[]]], 
@@ -246,12 +246,12 @@ NmQFGBExMpJIIgkvQx2Qldub22JDfuERESMjiSSS8PJ/YOJzPg==
                SEUploader`version] =!= SEUploader`version, LightMagenta, 
              Automatic]]], "Check for newer versions of the uploader palette",
           TooltipDelay -> Automatic]}]}], StandardForm],
-   ImageSizeCache->{122., {43., 48.}}],
+   ImageSizeCache->{101., {39., 44.}}],
   DynamicModuleValues:>{},
   Initialization:>(SEUploader`pnb = EvaluationNotebook[]; 
    SEUploader`closeButton[] := DefaultButton["Close", 
       DialogReturn[], ImageSize -> CurrentValue["DefaultButtonSize"], 
-      ImageMargins -> {{2, 2}, {10, 10}}]; SEUploader`version = "108"; 
+      ImageMargins -> {{2, 2}, {10, 10}}]; SEUploader`version = "107"; 
    SEUploader`versionURL = 
     "https://raw.github.com/szhorvat/SEUploader/master/version"; 
    SEUploader`paletteURL = 
@@ -387,12 +387,12 @@ MultipartRequestEntity", {SEUploader`part},
           SEUploader`error]; $Failed]]; SEUploader`copyToClipboard[
       Pattern[SEUploader`text, 
        Blank[]]] := 
-    Module[{SEUploader`nb}, SEUploader`nb = NotebookCreate[Visible -> False]; 
-      NotebookWrite[SEUploader`nb, 
+    Module[{$CellContext`nb}, $CellContext`nb = 
+       NotebookCreate[Visible -> False]; NotebookWrite[$CellContext`nb, 
         Cell[SEUploader`text, "Text"]]; 
-      SelectionMove[SEUploader`nb, All, Notebook]; 
-      FrontEndTokenExecute[SEUploader`nb, "Copy"]; 
-      NotebookClose[SEUploader`nb]; Null]; 
+      SelectionMove[$CellContext`nb, All, Notebook]; 
+      FrontEndTokenExecute[$CellContext`nb, "Copy"]; 
+      NotebookClose[$CellContext`nb]; Null]; 
    SEUploader`historyButton[] := CreateDialog[
       Column[{
         Style["Click a thumbnail to copy its URL.", Bold], 
@@ -462,30 +462,21 @@ MultipartRequestEntity", {SEUploader`part},
       Pattern[SEUploader`img, 
        Blank[Image]]] := CreateDialog[
       Column[{
-        Style["Upload image to StackExchange network?", Bold], 
+        Style[
+        "Upload image to StackExchange network?\nThe URL/MarkDown will be \
+copied to the clipboard.", Bold], 
         Pane[
          Image[SEUploader`img, Magnification -> 1], {Automatic, 
           Min[SEUploader`screenHeight[] - 140, 1 + Part[
              ImageDimensions[SEUploader`img], 2]]}, Scrollbars -> Automatic, 
          AppearanceElements -> {}, ImageMargins -> 0], 
-        Row[{
-          CancelButton[], 
-          Tooltip[
-           Button[
-           "Upload for Chat", 
-            SEUploader`uploadButtonAction[SEUploader`img, "", ""]; 
-            DialogReturn[], Method -> "Queued", ImageSize -> 
-            CurrentValue["DefaultButtonSize"]], 
-           "Marks the uploaded image for direct usage in the chat."], 
-          Tooltip[
-           DefaultButton[
-           "Upload for Site", SEUploader`uploadButtonAction[SEUploader`img]; 
-            DialogReturn[], Method -> "Queued", ImageSize -> 
-            CurrentValue["DefaultButtonSize"]], 
-           "Marks the uploaded image for direct usage in a question or \
-answer."]}, 
-         Spacer[10]]}], WindowTitle -> "Upload image to StackExchange?"]; 
-   SEUploader`rasterizeSelection1[
+        Item[
+         ChoiceButtons[{"Upload for site", "Upload for chat", "Close"}, {
+          SEUploader`uploadButtonAction[SEUploader`img]; DialogReturn[], 
+           SEUploader`uploadButtonAction[SEUploader`img, "", ""]; 
+           DialogReturn[], 
+           DialogReturn[]}], Alignment -> Right]}], WindowTitle -> 
+      "Upload image to StackExchange?"]; SEUploader`rasterizeSelection1[
       Optional[
        Pattern[SEUploader`maxWidth, 
         Blank[]], 650]] := 
@@ -521,11 +512,12 @@ answer."]},
                SEUploader`tag], True]]]; $Failed, SEUploader`tag]]]; Null)]]]
 },
 WindowSize->All,
-WindowMargins->{{Automatic, 231}, {Automatic, 56}},
+WindowMargins->{{Automatic, 0}, {Automatic, 0}},
 WindowElements->{},
 WindowTitle->"SE Uploader",
 TaggingRules->{"ImageUploadHistory" -> {}},
-FrontEndVersion->"9.0 for Linux x86 (64-bit) (October 10, 2012)",
+FrontEndVersion->"9.0 for Mac OS X x86 (32-bit, 64-bit Kernel) (November 20, \
+2012)",
 StyleDefinitions->"Palette.nb"
 ]
 (* End of Notebook Content *)
@@ -539,9 +531,10 @@ CellTagsIndex->{}
 *)
 (*NotebookFileOutline
 Notebook[{
-Cell[583, 21, 25289, 499, 93, InheritFromParent]
+Cell[583, 21, 24972, 490, 85, InheritFromParent]
 }
 ]
 *)
 
 (* End of internal cache information *)
+

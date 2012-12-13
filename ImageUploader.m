@@ -23,7 +23,7 @@ Global`palette = PaletteNotebook[DynamicModule[{},
        Button["Upload to SE (pp)",
         uploadPPButton[],
         Appearance -> "Palette"],
-      "Upload the selected experssion as an image to StackExchange\n(pixel-perfect rasterization)", TooltipDelay -> Automatic],
+      "Upload the selected expression as an image to StackExchange\n(pixel-perfect rasterization)", TooltipDelay -> Automatic],
       
       Unevaluated@Sequence[]
       ],
@@ -255,7 +255,7 @@ Global`palette = PaletteNotebook[DynamicModule[{},
      uploadWithPreview[img_Image] :=
       CreateDialog[
        Column[{
-         Style["Upload image to StackExchange network?", Bold],
+         Style["Upload image to StackExchange network?\nThe URL/MarkDown will be copied to the clipboard.", Bold],
          Pane[
           Image[img, Magnification -> 1], {Automatic, 
            Min[screenHeight[] - 140, 1 + ImageDimensions[img][[2]]]},
@@ -263,25 +263,20 @@ Global`palette = PaletteNotebook[DynamicModule[{},
           ImageMargins -> 0
          ],          
           (*
-          Two buttons, one which copies an url for the site Q&Q and one for the
+          Two buttons, one which copies an url for the site Q&A and one for the
           chat. The Chat and Site button only differ in the wrapper of the url.
           For an answer/question (Site) you usually want it in the style
           ![Mathematica graphics](http://i.stack.imgur.com/iYQnh.png) while
           the Chat needs the pure url.
          *)
-         Row[{
-           CancelButton[],
-           Tooltip[
-             Button["Upload for Chat", uploadButtonAction[img, "",""]; DialogReturn[], 
-               Method->"Queued", ImageSize -> CurrentValue["DefaultButtonSize"]],
-             "Marks the uploaded image for direct usage in the chat."
-           ],
-           Tooltip[
-             DefaultButton["Upload for Site", uploadButtonAction[img]; DialogReturn[],
-               Method->"Queued", ImageSize -> CurrentValue["DefaultButtonSize"]],
-             "Marks the uploaded image for direct usage in a question or answer."                 
-           ]
-         }, Spacer[10]]
+         Item[
+           ChoiceButtons[{"Upload for site", "Upload for chat", "Close"},
+             {uploadButtonAction[img]; DialogReturn[],
+              uploadButtonAction[img, "",""]; DialogReturn[], 
+              DialogReturn[]
+             }],
+           Alignment -> Right
+         ]
        }],
        WindowTitle -> "Upload image to StackExchange?"
        ];
