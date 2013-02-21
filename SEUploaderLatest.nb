@@ -210,7 +210,9 @@ NmQFGBExMpJIIgkvQx2Qldub22JDfuERESMjiSSS8PJ/YOJzPg==
           SEUploader`uploadButton[], Appearance -> "Palette"], 
          "Upload the selected expression as an image to StackExchange", 
          TooltipDelay -> Automatic], 
-        If[$OperatingSystem === "Windows", 
+        If[
+         Or[$OperatingSystem === "Windows", 
+          And[$OperatingSystem === "MacOSX", $VersionNumber == 9]], 
          Tooltip[
           Button["Upload to SE (pp)", 
            SEUploader`uploadPPButton[], Appearance -> "Palette"], 
@@ -232,7 +234,7 @@ NmQFGBExMpJIIgkvQx2Qldub22JDfuERESMjiSSS8PJ/YOJzPg==
                SEUploader`version] =!= SEUploader`version, LightMagenta, 
              Automatic]]], "Check for newer versions of the uploader palette",
           TooltipDelay -> Automatic]}]}], StandardForm],
-   ImageSizeCache->{101., {39., 44.}}],
+   ImageSizeCache->{129., {50.84375, 56.15625}}],
   DynamicModuleValues:>{},
   Initialization:>(Block[{$ContextPath}, 
      Needs["JLink`"]]; JLink`InstallJava[]; 
@@ -468,7 +470,7 @@ copied to the clipboard.", Bold],
       Optional[
        Pattern[SEUploader`maxWidth, 
         Blank[]], 650]] := 
-    Module[{SEUploader`target, SEUploader`selection, SEUploader`image}, 
+    Module[{SEUploader`target, SEUploader`selection, $CellContext`image}, 
       SEUploader`selection = NotebookRead[
          SelectedNotebook[]]; If[
         MemberQ[
@@ -477,9 +479,10 @@ copied to the clipboard.", Bold],
         SEUploader`target = 
          CreateDocument[{}, WindowSelected -> False, Visible -> False, 
            WindowSize -> SEUploader`maxWidth]; 
-        NotebookWrite[SEUploader`target, SEUploader`selection]; 
-        SEUploader`image = Rasterize[SEUploader`target, "Image"]; 
-        NotebookClose[SEUploader`target]; SEUploader`image]]; 
+        NotebookWrite[
+         SEUploader`target, SEUploader`selection]; $CellContext`image = 
+         Rasterize[SEUploader`target, "Image"]; 
+        NotebookClose[SEUploader`target]; $CellContext`image]]; 
    SEUploader`rasterizeSelection2[] := If[
       MemberQ[
        Hold[{}, $Failed, 
@@ -488,7 +491,8 @@ copied to the clipboard.", Bold],
         SelectedNotebook[]]], $Failed, 
       Module[{SEUploader`tag}, FrontEndExecute[
          FrontEndToken[
-          FrontEnd`SelectedNotebook[], "CopySpecial", "MGF"]]; 
+          FrontEnd`SelectedNotebook[], "CopySpecial", 
+          If[$OperatingSystem === "Windows", "MGF", "TIFF"]]]; 
        Catch[ReplaceAll[
            NotebookGet[
             ClipboardNotebook[]], Pattern[SEUploader`r, 
@@ -507,3 +511,5 @@ TaggingRules->{"ImageUploadHistory" -> {}},
 StyleDefinitions->"Palette.nb"
 ]
 (* End of Notebook Content *)
+
+(* End of internal cache information *)

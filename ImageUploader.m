@@ -17,7 +17,7 @@ Global`palette = PaletteNotebook[DynamicModule[{},
             TooltipDelay -> Automatic
         ],
 
-     If[$OperatingSystem === "Windows",
+     If[$OperatingSystem === "Windows" || ($OperatingSystem === "MacOSX" && $VersionNumber == 9),
       
       Tooltip[
        Button["Upload to SE (pp)",
@@ -309,7 +309,7 @@ Global`palette = PaletteNotebook[DynamicModule[{},
        $Failed, (* there was nothing selected *)
        
        Module[{tag},
-        FrontEndExecute[FrontEndToken[FrontEnd`SelectedNotebook[], "CopySpecial", "MGF"]];
+        FrontEndExecute[FrontEndToken[FrontEnd`SelectedNotebook[], "CopySpecial", If[$OperatingSystem === "Windows", "MGF", "TIFF"]]];
         Catch[
          NotebookGet@ClipboardNotebook[] /. 
           r_RasterBox :> 
